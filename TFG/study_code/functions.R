@@ -137,7 +137,9 @@ addDoseCampaign <- function(cohort, name = tableName(cohort)) {
       window = list(c(0, Inf)),
       nameStyle = "vaccine_dose",
       name = name
-    ) 
+    ) |> 
+    mutate(vaccine_dose = as.character(vaccine_dose)) |>
+    compute(name = name)
 }
 
 addDosePriorCampaign <- function(cohort, name = tableName(cohort)) {
@@ -152,6 +154,7 @@ addDosePriorCampaign <- function(cohort, name = tableName(cohort)) {
       nameStyle = "prior_dose",
       name = name
     )|>
+    mutate(prior_dose = as.integer(prior_dose)) |>
     # time since last dose
     addCohortIntersectDays(
       targetCohortTable = "vaccine_90",
@@ -160,7 +163,6 @@ addDosePriorCampaign <- function(cohort, name = tableName(cohort)) {
       nameStyle = "last_dose_days",
       name = name
     )
-    
 }
 
 requireCampaign <- function(vaccine_cohort, campaign, name = "{vaccine_cohort}_{campaign}"){
@@ -204,15 +206,26 @@ trimDatesIntoCampaign <- function(cohort, campaign) {
 }
 
 addAgeEligibility <- function(cohort, name = tableName(cohort), campaign ="all") {
-  cohort|>
-    mutate(age_eligibility=case_when(
-      (vaccination_campaign == "a_2023" | campaign == "a_2023") & age >= 65 ~ 1L, 
-      (vaccination_campaign == "s_2024" | campaign == "s_2024") & age >= 75 ~ 1L,
-      (vaccination_campaign == "a_2024" | campaign == "a_2024") & age >= 75 ~ 1L,
-      (vaccination_campaign == "s_2025" | campaign == "s_2025") & age >= 75 ~ 1L,
-      (vaccination_campaign == "a_2025" | campaign == "a_2025") & age >= 75 ~ 1L,
-  TRUE ~ 0L) 
-    ) |> 
+    if("vaccination_campaign" %in% colnames(cohort)){
+      cohort |>
+        mutate(age_eligibility=case_when(
+      (vaccination_campaign == "a_2023") & age >= 65 ~ 1L, 
+      (vaccination_campaign == "s_2024") & age >= 75 ~ 1L,
+      (vaccination_campaign == "a_2024") & age >= 75 ~ 1L,
+      (vaccination_campaign == "s_2025") & age >= 75 ~ 1L,
+      (vaccination_campaign == "a_2025") & age >= 75 ~ 1L,
+  TRUE ~ 0L)) |>
     compute(name = name)
+    } 
+  else {
+  cohort |>
+    mutate(age_eligibility=case_when(
+      (campaign == "a_2023") & age >= 65 ~ 1L, 
+      (campaign == "s_2024") & age >= 75 ~ 1L,
+      (campaign == "a_2024") & age >= 75 ~ 1L,
+      (campaign == "s_2025") & age >= 75 ~ 1L,
+      (campaign == "a_2025") & age >= 75 ~ 1L,
+      TRUE ~ 0L)) |>
+        compute(name = name)}
 }
 

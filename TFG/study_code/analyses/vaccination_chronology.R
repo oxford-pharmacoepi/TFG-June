@@ -3,8 +3,9 @@
 # the number of vaccines provided each dose for each dose (n_dose_day), and 
 # the number of vaccines provided at a certain day (n)
 # Since the data is part of a plot (thus, collected and plotted locally), n will be substituted by five if it falls below five
-x_dose <- cdm$vaccine_90 |>
-  group_by(cohort_start_date, dose) |>
+x_dose <- cdm$vaccinated_within_campaigns |>
+  group_by(cohort_start_date, vaccine_dose) |>
+  rename(dose = vaccine_dose) |>
   add_tally()|>
   rename(n_dose_day=n) |>
   ungroup() |>

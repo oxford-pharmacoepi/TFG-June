@@ -1,0 +1,12 @@
+name: ShinyCoverage
+title: ShinyCoverage
+username: dpa-pde-oxford
+account: dpa-pde-oxford
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 17017018
+bundleId: 11815798
+url: https://dpa-pde-oxford.shinyapps.io/ShinyCoverage/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

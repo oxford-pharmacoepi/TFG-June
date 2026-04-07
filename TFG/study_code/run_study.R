@@ -28,24 +28,26 @@ logMessage("Codelists and functions to be used imported")
 source(here("cohorts", "instantiate_cohorts.R")) 
 logMessage("Vaccinated people identified by campaign")
 
-source(here("cohorts", "vaccine_cohorts.R"))
-logMessage("Vaccinated people within the vaccination campaigns of interest -either for being immunosuppressed or by age- 
-           stratified by age, ethnicity, IMD, sex and region. Will be used for overall attrition") 
-
 source(here("cohorts", "all_campaign.R")) 
 logMessage("Eligibles for each of the vaccination campaigns -either for being immunosuppressed or by age- 
            stratified by age, ethnicity, IMD, sex and region. Will be used for coverage")  
 logMessage("Study cohorts instantiated")
 
+source(here("cohorts", "vaccine_cohort.R"))
+logMessage("Vaccinated people within the vaccination campaigns of interest -either for being immunosuppressed or by age-") 
+
 # Cohort counts and attrition ----
 results[["attrition_vaccinated"]] <- summariseCohortAttrition(cdm$vaccinated_within_campaigns)
-results[["attrition_campaign1"]] <- summariseCohortAttrition(cdm$campaign1)
+results[["attrition_for_coverage"]] <- summariseCohortAttrition(cdm$all_campaigns)
+logMessage("Attritions by campaign and for coverage finished")
 
 # Run analyses ----
 logMessage("Run study analyses")
 source(here("analyses", "vaccine_characteristics.R"))
-logMessage("Analyses for the vaccinated people stratified for all campaigs, 
-           where the 2 dosis filter isn't considered DONE")
+logMessage("Analyses for the vaccinated people and eligibles for each campaign done")
+
+source(here("analyses", "coverage.R"))
+logMessage("Coverage analysis finished")
 
 logMessage("Analyses finished")
 
@@ -54,7 +56,10 @@ results[["log"]] <- summariseLogFile(cdmName = omopgenerics::cdmName(cdm))
 
 # Finish ----
 results$characterisation <- characterisation
+results$characterisation_eligibles <- characterisation_eligibles
+results$summary_campaigns <- summary_campaigns 
 
+#omopgenerics::tidy(results$summary_campaign1)
 
 results <- results |>
   vctrs::list_drop_empty() |>
@@ -68,7 +73,7 @@ exportSummarisedResult(results,
 # Save data for the local plots of the vaccination chronology 
 #(see "vaccination_chronology" for more info). Should be computed once
 #source(here("analyses", "vaccination_chronology.R"))
-write.csv(x_dose, "Results/plot_dose.csv", row.names = FALSE)
+#write.csv(x_dose, "Results/plot_dose.csv", row.names = FALSE)
 
 cli::cli_alert_success("Study finished")
 

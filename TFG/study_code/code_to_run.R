@@ -29,7 +29,7 @@ db <- DBI::dbConnect(RPostgres::Postgres(),
 cdm_schema <- Sys.getenv("cdm_schema")
 
 # A prefix for all permanent tables in the database
-write_prefix <- Sys.getenv("write_schema")
+write_prefix <- Sys.getenv("write_prefix")
 
 # The name of the schema where results tables will be created
 write_schema <- Sys.getenv("write_schema")
@@ -45,8 +45,12 @@ cdm <- cdmFromCon(
   writeSchema = write_schema,
   writePrefix = write_prefix,
   cdmName = dbName,
-  achillesSchema = achilles_schema
+  achillesSchema = achilles_schema #,cohortTables = c()
 )
+cdm <- readSourceTable(cdm = cdm, name ="summary_campaigns")
+listSourceTables(cdm = cdm)
+# dropSourceTable(cdm = cdm, name = dplyr::everything())
+
 
 # Run the study
 source(here("run_study.R"))
