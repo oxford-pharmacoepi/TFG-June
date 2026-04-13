@@ -63,12 +63,6 @@ cdm$all_campaigns <- cdm$all_campaigns |>
     nameStyle = "{concept_name}_count_{window_name}",
     name ="all_campaigns"
   ) |>
-  addConceptIntersectFlag(
-    conceptSet = vaccines,
-    window = list(),
-    nameStyle = "{concept_name}_flag_{window_name}",
-    name ="all_campaigns"
-  ) |>
   addConceptIntersectCount(
     conceptSet = comorbidities,
     window = list("prior"=c(-Inf, -1)),
