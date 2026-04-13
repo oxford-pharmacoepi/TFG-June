@@ -21,7 +21,11 @@ results[["obs_period"]] <- summariseObservationPeriod(cdm$observation_period)
 
 # Instantiate study cohorts ----
 logMessage("Instantiating study cohorts")
-codelist <- importCodelist("codelist", type = "csv")
+
+diagnosis <- importCodelist("codelist", type = "csv")
+comorbidities <- importCodelist(here::here("codelist", "comorbidities"), type = "csv")
+immuno <- importCodelist(here::here("codelist", "immuno"), type = "csv")
+vaccines <- importCodelist(here::here("codelist", "vaccines"), type = "csv")
 source(here("functions.R"))
 logMessage("Codelists and functions to be used imported")
 

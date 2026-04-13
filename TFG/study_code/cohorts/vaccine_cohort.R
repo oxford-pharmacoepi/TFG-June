@@ -10,8 +10,9 @@ cdm$vaccinated_within_campaigns <-cdm$all_campaigns |>
   select( -cohort_start_date, -cohort_end_date) |>
   left_join(
     cdm$vaccine_90|>
-      select(-cohort_definition_id, -dose), 
-    by = c("subject_id", "vaccination_campaign")
+      select(-cohort_definition_id, -dose) |>
+      rename(cohort_name=vaccination_campaign), 
+    by = c("subject_id", "cohort_name")
   ) |>
  compute(name = "vaccinated_within_campaigns")
 

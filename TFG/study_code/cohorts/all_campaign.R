@@ -24,7 +24,7 @@ cdm[[campaign]] <- cdm$demo |>
   filter(prior_dose>=2L) |>
   compute(name = campaign)|>
   recordCohortAttrition(reason = "At least 2 doses at campaign start") |>
-  addAgeEligibility() |>
+  addAgeEligibility(campaign = campaign) |>
   addSex(name = campaign)
 }
 
@@ -38,3 +38,45 @@ cdm<- bind(
   
 cdm$all_campaigns <- cdm$all_campaigns |>
  addCohortName()
+
+#Add comorbidity and other vaccine intersection, after changing the cohort_start_date 
+# to the actual vaccination day
+
+cdm$all_campaigns <- cdm$all_campaigns |>
+  select( -cohort_start_date, -cohort_end_date) |>
+  left_join(
+    cdm$vaccine_90|>
+      select(-cohort_definition_id, -dose) |>
+      rename(cohort_name=vaccination_campaign), 
+    by = c("subject_id", "cohort_name")
+  ) |>
+  compute(name = "all_campaigns") |>
+  addConceptIntersectFlag(
+    conceptSet = vaccines,
+    window = list("prior"=c(-Inf, -1), "on_index"=c(0, 0)),
+    nameStyle = "{concept_name}_flag_{window_name}",
+    name ="all_campaigns"
+  ) |>
+  addConceptIntersectCount(
+    conceptSet = vaccines,
+    window = list("prior"=c(-Inf, -1)),
+    nameStyle = "{concept_name}_count_{window_name}",
+    name ="all_campaigns"
+  ) |>
+  addConceptIntersectFlag(
+    conceptSet = vaccines,
+    window = list(),
+    nameStyle = "{concept_name}_flag_{window_name}",
+    name ="all_campaigns"
+  ) |>
+  addConceptIntersectCount(
+    conceptSet = comorbidities,
+    window = list("prior"=c(-Inf, -1)),
+    nameStyle = "{concept_name}_count_{window_name}",
+    name ="all_campaigns"
+  ) |>
+  addAge(ageGroup = list("=<34"=c(0, 34.9), "35-45"=c(35, 44.9), "45-54"=c(45,54.9), 
+                    "55-65"=c(55,64.9), "65-74"=c(65,74.9), "75-84"=c(75,84.9),
+                    "85-94"=c(85,94.9), ">=95"=c(95,120)), 
+         name = "all_campaigns")
+  

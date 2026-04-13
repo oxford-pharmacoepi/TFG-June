@@ -4,7 +4,7 @@
 cdm$vaccine <- conceptCohort(cdm = cdm,
                              conceptSet = list(
                                "vaccine_record" =
-                                 vac),
+                                codelist$covid_vaccine),
                              name = "vaccine"
 )
 
@@ -23,4 +23,4 @@ cdm$vaccine_90 <- cdm$vaccine |>
   mutate(dose = row_number()) |>
   ungroup() |>
   addCampaigns()
-  
+

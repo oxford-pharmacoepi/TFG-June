@@ -53,7 +53,7 @@ addImmunosuppressed <- function(cohort, name = tableName(cohort)) {
       conceptSet = list(
         # MC equivalent a: conceptSet = codelist["syst_corticosteriods"]
         "immuno_condsyst" =
-          codelist$syst_corticosteriods
+          immuno$syst_corticosteriods
       ),
       window = list(
         "last_1_2year" = c(-183, 0)
@@ -63,7 +63,7 @@ addImmunosuppressed <- function(cohort, name = tableName(cohort)) {
     addConceptIntersectFlag(
       conceptSet = list(
         "immuno_agsyst" =
-          codelist$transplant
+          immuno$transplant
       ),
       window = list(
         "last_year" = c(-365, 0)
@@ -74,8 +74,8 @@ addImmunosuppressed <- function(cohort, name = tableName(cohort)) {
       conceptSet = list(
         "immuno_agent" =
           c(
-            codelist$inmmunos_antineo,
-            codelist$immunos_antineo_exclude
+            immuno$inmmunos_antineo,
+            immuno$immunos_antineo_exclude
           )
       ),
       window = list(
@@ -87,10 +87,10 @@ addImmunosuppressed <- function(cohort, name = tableName(cohort)) {
       conceptSet = list(
         "immuno_cond" =
           c(
-            codelist$hiv_aids,
-            codelist$intrinsec_immune,
-            codelist$scid,
-            codelist$cancerexcludnonmelaskincancer
+            immuno$hiv_aids,
+            immuno$intrinsec_immune,
+            immuno$scid,
+            immuno$cancerexcludnonmelaskincancer
           )
       ),
       window = list(
@@ -205,7 +205,7 @@ trimDatesIntoCampaign <- function(cohort, campaign) {
     requirePriorObservation(minPriorObservation = 365)
 }
 
-addAgeEligibility <- function(cohort, name = tableName(cohort), campaign ="all") {
+addAgeEligibility <- function(cohort, name = tableName(cohort), campaign) {
     if("vaccination_campaign" %in% colnames(cohort)){
       cohort |>
         mutate(age_eligibility=case_when(

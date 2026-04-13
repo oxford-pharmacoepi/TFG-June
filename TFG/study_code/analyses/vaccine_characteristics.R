@@ -1,5 +1,5 @@
 # All of the vaccinated people stratified for all campaigs, where the 2 dosis 
-# filter isn't considered
+# filter is considered
 characterisation <- cdm$vaccinated_within_campaigns |>
   summariseCharacteristics(
     tableIntersectCount = list(
