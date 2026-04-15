@@ -76,8 +76,8 @@ exportSummarisedResult(results,
 # Results to save as csv and plot ----
 # Save data for the local plots of the vaccination chronology 
 #(see "vaccination_chronology" for more info). Should be computed once
-#source(here("analyses", "vaccination_chronology.R"))
-#write.csv(x_dose, "Results/plot_dose.csv", row.names = FALSE)
+source(here("analyses", "vaccination_chronology.R"))
+write.csv(x_dose, "Results/plot_dose.csv", row.names = FALSE)
 
 cli::cli_alert_success("Study finished")
 

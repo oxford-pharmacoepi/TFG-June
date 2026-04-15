@@ -24,3 +24,16 @@ cdm$vaccine_90 <- cdm$vaccine |>
   ungroup() |>
   addCampaigns()
 
+# Objective 1: Characterisation
+
+# Other vaccines: 
+cdm$othervaccines <- conceptCohort(cdm = cdm, 
+                                   name = "othervaccines", 
+                                   conceptSet = vaccines,
+                                   useSourceFields = TRUE,
+                                   exit = "event_start_date")
+
+# Comorbidities
+cdm$comorbidities <- conceptCohort(cdm = cdm, 
+                                   name = "comorbidities", 
+                                   conceptSet = comorbidities)

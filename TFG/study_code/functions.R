@@ -229,3 +229,26 @@ addAgeEligibility <- function(cohort, name = tableName(cohort), campaign) {
         compute(name = name)}
 }
 
+addVaccinationDate <- function(cohort, name = tableName(cohort)) {
+cohort |>
+    left_join(
+      cdm$vaccine_90 |>
+        select(-cohort_definition_id, -dose) |>
+        rename(cohort_name = vaccination_campaign),
+      by = c("subject_id", "cohort_name")
+      ) |>
+    mutate(cohort_start_date = if_else(
+      is.na(cohort_start_date.y),
+      cohort_start_date.x,
+      cohort_start_date.y
+      )
+    ) |>
+    mutate(cohort_end_date = if_else(
+      is.na(cohort_end_date.y),
+      cohort_end_date.x,
+      cohort_end_date.y
+      )
+    ) |>
+    select(-cohort_start_date.x, -cohort_start_date.y, -cohort_end_date.x, -cohort_end_date.y) |>
+    compute(name = name) 
+}

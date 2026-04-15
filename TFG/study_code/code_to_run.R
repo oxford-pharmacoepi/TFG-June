@@ -47,7 +47,7 @@ cdm <- cdmFromCon(
   cdmName = dbName,
   achillesSchema = achilles_schema #,cohortTables = c()
 )
-#cdm <- readSourceTable(cdm = cdm, name ="all_campaigns")
+cdm <- readSourceTable(cdm = cdm, name ="vaccine_90")
 #cdmlistSourceTables(cdm = cdm)
 # dropSourceTable(cdm = cdm, name = dplyr::everything())
 
