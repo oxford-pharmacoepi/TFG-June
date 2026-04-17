@@ -4,7 +4,7 @@
 cdm$vaccine <- conceptCohort(cdm = cdm,
                              conceptSet = list(
                                "vaccine_record" =
-                                codelist$covid_vaccine),
+                                diagnosis$covid_vaccine),
                              name = "vaccine"
 )
 

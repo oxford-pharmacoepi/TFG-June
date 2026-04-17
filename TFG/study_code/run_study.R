@@ -35,10 +35,11 @@ logMessage("Vaccinated people identified by campaign")
 source(here("cohorts", "all_campaign.R")) 
 logMessage("Eligibles for each of the vaccination campaigns -either for being immunosuppressed or by age- 
            stratified by age, ethnicity, IMD, sex and region. Will be used for coverage")  
-logMessage("Study cohorts instantiated")
 
 source(here("cohorts", "vaccine_cohort.R"))
 logMessage("Vaccinated people within the vaccination campaigns of interest -either for being immunosuppressed or by age-") 
+
+logMessage("Study cohorts instantiated")
 
 # Cohort counts and attrition ----
 results[["attrition_vaccinated"]] <- summariseCohortAttrition(cdm$vaccinated_within_campaigns)
@@ -76,8 +77,8 @@ exportSummarisedResult(results,
 # Results to save as csv and plot ----
 # Save data for the local plots of the vaccination chronology 
 #(see "vaccination_chronology" for more info). Should be computed once
-source(here("analyses", "vaccination_chronology.R"))
-write.csv(x_dose, "Results/plot_dose.csv", row.names = FALSE)
+#source(here("analyses", "vaccination_chronology.R"))
+#write.csv(x_dosee, "Results/plot_dosee.csv", row.names = FALSE)
 
 cli::cli_alert_success("Study finished")
 

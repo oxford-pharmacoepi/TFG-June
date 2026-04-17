@@ -21,7 +21,7 @@ x_dose <- cdm$vaccine_90|>
 x_dosee <- cdm$vaccinated_within_campaigns|>
   rename_with(~"dose", any_of("vaccine_dose")) |>
   rename_with(~"vaccination_campaign", any_of("cohort_name")) |>
-  select(cohort_start_date, dose, subject_id, cohort_name) |>
+  select(cohort_start_date, dose, subject_id, vaccination_campaign) |>
   group_by(cohort_start_date, dose) |>
   add_tally()|>
   rename(n_dose_day=n) |>
