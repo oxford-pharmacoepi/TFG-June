@@ -4,8 +4,8 @@ df <- cdm$all_campaigns |>
   select(vaccinated, age_group, immunosuppressed, imd, ethnicity, region, sex, prior_dose) |>
   collect() |>
   mutate(
-    age_group = factor(age_group, levels = c("65-74", "75-84", "85-94", "95>",
-                                             "34<", "35-45", "45-54", "55-64")),
+    age_group = factor(age_group, levels = c("65-74", "75-84", "85-94", ">=95",
+                                             "=<34", "35-45", "45-54", "55-64")),
     immunosuppressed = factor(immunosuppressed, levels = c("0", "1")),
     imd = factor(imd, levels = c("Q3", "Q1", "Q2", "Q4", "Q5")),
     ethnicity = factor(ethnicity, levels = c("white", "black", "asian", "mixed", "other", "missing")),
