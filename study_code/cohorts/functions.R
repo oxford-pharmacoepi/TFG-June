@@ -47,65 +47,49 @@ addRegion <- function(cohort,  name = tableName(cohort)) {
     compute(name = name)
 }
 
-addImmunosuppressed <- function(cohort, name = tableName(cohort)) {
+addCampaigns <- function(cohort, name = tableName(cohort)){
+  cohort|>
+    #filter(cohort_start_date>as.Date("2023-10-02") & cohort_start_date<as.Date("2026-01-31"))|>
+    mutate(vaccination_campaign = case_when(
+      cohort_start_date>=as.Date("2023-10-02") & cohort_start_date<=as.Date("2024-01-31") ~ "a_2023",
+      cohort_start_date>=as.Date("2024-04-15") & cohort_start_date<=as.Date("2024-06-30") ~ "s_2024",
+      cohort_start_date>=as.Date("2024-10-03") & cohort_start_date<=as.Date("2025-01-31") ~ "a_2024",
+      cohort_start_date>=as.Date("2025-04-01") & cohort_start_date<=as.Date("2025-06-17") ~ "s_2025",
+      cohort_start_date>=as.Date("2025-09-01") & cohort_start_date<=as.Date("2026-01-31") ~ "a_2025",
+      TRUE ~ NA_character_)
+    ) |>
+    mutate(vaccination_campaign = coalesce(vaccination_campaign, "None")) |>
+    compute(name = name)
+}
+
+addImmunosuppressed <-  function(cohort, name = tableName(cohort)) {
   cohort |>
-    addConceptIntersectFlag(
-      conceptSet = list(
-        # MC equivalent a: conceptSet = codelist["syst_corticosteriods"]
-        "immuno_condsyst" =
-          immuno$syst_corticosteriods
+    addCohortIntersectFlag(
+      targetCohortTable = "immunosuppressed",
+      targetCohortId = c(
+        "cancerexcludnonmelaskincancer", "hiv_aids", "intrinsec_immune",
+        "autoimmune", "transplant", "scid"
       ),
-      window = list(
-        "last_1_2year" = c(-183, 0)
-      ),
+      window = c(-365, 0),
+      nameStyle = "{cohort_name}",
       name = name
     ) |>
-    addConceptIntersectFlag(
-      conceptSet = list(
-        "immuno_agsyst" =
-          immuno$transplant
+    addCohortIntersectFlag(
+      targetCohortTable = "immunosuppressed",
+      targetCohortId = c(
+        "immunos_antineo", "immunos_antineo_exclude", "syst_corticosteriods"
       ),
-      window = list(
-        "last_year" = c(-365, 0)
-      ),
+      window = c(-183, -1),
+      nameStyle = "{cohort_name}",
       name = name
     ) |>
-    addConceptIntersectFlag(
-      conceptSet = list(
-        "immuno_agent" =
-          c(
-            immuno$inmmunos_antineo,
-            immuno$immunos_antineo_exclude
-          )
-      ),
-      window = list(
-        "last_1_2year" = c(-183, 0)
-      ),
-      name = name
-    ) |>
-    addConceptIntersectFlag(
-      conceptSet = list(
-        "immuno_cond" =
-          c(
-            immuno$hiv_aids,
-            immuno$intrinsec_immune,
-            immuno$scid,
-            immuno$cancerexcludnonmelaskincancer
-          )
-      ),
-      window = list(
-        "last_year" = c(-365, 0)
-      ),
-      name = name
-    ) |>
-    mutate(
-      immunosuppressed = if_else(
-        (immuno_condsyst_last_1_2year == 1 & immuno_agsyst_last_year == 1) |
-          immuno_agent_last_1_2year == 1 |
-          immuno_cond_last_year == 1,
-        1L, 0L)
-    ) |>
-    select(-immuno_agent_last_1_2year,-immuno_cond_last_year, -immuno_agsyst_last_year, -immuno_condsyst_last_1_2year) |>
+    mutate(immunosuppressed = case_when(
+      cancerexcludnonmelaskincancer + hiv_aids + intrinsec_immune +
+        immunos_antineo + immunos_antineo_exclude + scid > 0L ~ 1L,
+      syst_corticosteriods == 1L & autoimmune + transplant > 0L ~ 1L,
+      TRUE ~  0L
+    )) |>
+    select(c(colnames(cohort),"immunosuppressed")) |>
     compute(name = name)
 }
 
@@ -127,7 +111,7 @@ addCampaigns <- function(cohort, name = tableName(cohort)){
 addDosePriorCampaign <- function(cohort, name = tableName(cohort)) {
   cohort|>
     addCohortIntersectField(
-      targetCohortTable = "vaccine_90",
+      targetCohortTable = "vaccine_washout",
       field = "dose",
       indexDate = "cohort_start_date", # start of vaccination campaign
       order = "last",
@@ -138,7 +122,7 @@ addDosePriorCampaign <- function(cohort, name = tableName(cohort)) {
     mutate(prior_dose = as.integer(prior_dose)) |>
     # time since last dose
     addCohortIntersectDays(
-      targetCohortTable = "vaccine_90",
+      targetCohortTable = "vaccine_washout",
       window = c(-Inf, -1),
       order = "last",
       nameStyle = "last_dose_days",
@@ -149,20 +133,20 @@ addDosePriorCampaign <- function(cohort, name = tableName(cohort)) {
 addVaccinatedInCampaign <- function(cohort, name = tableName(cohort)){
   cohort |> 
     addCohortIntersectFlag(
-    targetCohortTable = "vaccine_90",
+    targetCohortTable = "vaccine_washout",
     indexDate = "cohort_start_date",
+    censorDate = "cohort_end_date",
     window = list(c(0, Inf)),
     nameStyle = "vaccinated",
     name = name
-   ) |> 
-    mutate(vaccine_dose = as.character(vaccine_dose)) |>
-    compute(name = name) |>
+   ) |>
     left_join(
-      cdm$vaccine_90 |>
-        select(-cohort_definition_id, -dose) |>
-        rename(cohort_name = vaccination_campaign),
-      by = c("subject_id", "cohort_name")
+      cdm$vaccine_washout |>
+        select(-cohort_definition_id) |>
+        filter(vaccination_campaign == campaign),
+      by = c("subject_id")
     ) |>
+    select(-vaccination_campaign) |>
     mutate(cohort_start_date = if_else(
       is.na(cohort_start_date.y),
       cohort_start_date.x,
@@ -176,7 +160,7 @@ addVaccinatedInCampaign <- function(cohort, name = tableName(cohort)){
     )
     ) |>
     select(-cohort_start_date.x, -cohort_start_date.y, -cohort_end_date.x, -cohort_end_date.y) |>
-    compute(name = name) 
+    compute(name = name)
 }
 
 trimDatesIntoCampaign <- function(cohort, campaign) {
@@ -222,4 +206,21 @@ addAgeEligibility <- function(cohort, name = tableName(cohort), campaign) {
       (campaign == "a_2025") & age >= 75 ~ 1L,
       TRUE ~ 0L)) |>
         compute(name = name)}
+}
+
+addSensitivity <- function(cohort, name = tableName(cohort)) {
+  
+  cohort |>
+    left_join(cdm$demo_sens |>
+                select(subject_id) |>
+                mutate(satisfy_sensitivity = 1L),
+              by = "subject_id") |>
+    mutate(
+      satisfy_sensitivity = coalesce(
+        satisfy_sensitivity,
+        0L
+      )
+    ) |>
+    compute(name = name)
+  
 }

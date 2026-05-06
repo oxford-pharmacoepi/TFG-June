@@ -5,6 +5,7 @@ characterisation <- cdm$vaccinated_within_campaigns |>
   VaccineCharacterisation()
 
 characterisation_eligibles <- cdm$all_campaigns |>
-  VaccineCharacterisation()
-#here there is no vaccination dose
+  VaccineCharacterisation(estimates=c("region", "ethnicity", "sex", "imd",
+                                      "immunosuppressed", "age_eligibility", 
+                                      "prior_dose", "age_group"))
 

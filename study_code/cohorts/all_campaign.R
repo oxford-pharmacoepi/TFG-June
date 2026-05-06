@@ -1,9 +1,4 @@
 # Select the individuals to be included for the coverage assessment
-cdm$demo <- demographicsCohort(cdm, name = "demo") |>
-  # to consider to add this with demo cohort
-  addRegion() |>
-  addIMD() |>
-  addEthnicity(name="demo") 
 
 campaigns <- c("a_2023", "s_2024", "a_2024", "s_2025")
 
@@ -12,10 +7,7 @@ cdm[[campaign]] <- cdm$demo |>
   copyCohorts(n = 1, name = campaign) |>
   trimDatesIntoCampaign(campaign) |>
   addVaccinatedInCampaign() |>
-  addCohortIntersectField(cdm$immunosuppressed,
-                             immunosuppressed,
-                             window = list(c(0, Inf)),
-                             name = campaign) |>
+  addImmunosuppressed() |>
   addDemographics(age =TRUE,
                   sex = TRUE,
                   name = campaign) |>
@@ -28,7 +20,8 @@ cdm[[campaign]] <- cdm$demo |>
   filter(prior_dose>=2L) |>
   compute(name = campaign)|>
   recordCohortAttrition(reason = "At least 2 doses at campaign start") |>
-  addAgeEligibility(campaign = campaign)
+  addAgeEligibility(campaign = campaign) |>
+  addSensitivity(name = campaign)
 }
 
 cdm<- bind(
@@ -41,13 +34,23 @@ cdm<- bind(
 
 # We change the cohort_start_date by the actual vaccination day if vaccinated, 
 # and leave it as it was, if not
+
+#Age Group Parameter
+ageGroups <- list(
+  "=<34"=c(0, 34), "35-45"=c(35, 44), "45-54"=c(45,54), 
+  "55-64"=c(55,64), "65-74"=c(65,74), "75-84"=c(75,84),
+  "85-94"=c(85,94), ">=95"=c(95,120))
+
 cdm$all_campaigns <- cdm$all_campaigns |>
   addCohortName() |>
-  addAge(ageGroup = list(
-    "=<34"=c(0, 34), "35-45"=c(35, 44), "45-54"=c(45,54), 
-    "55-64"=c(55,64), "65-74"=c(65,74), "75-84"=c(75,84),
-    "85-94"=c(85,94), ">=95"=c(95,120)),
+  addAge(ageGroup = ageGroups,
     name = "all_campaigns")
+
+cdm$all_campaigns_sens <- cdm$all_campaigns |>
+  filter(satisfy_sensitivity == 1L) |>
+  compute(name = "all_campaigns_sens")
+      
+      
 
 
   

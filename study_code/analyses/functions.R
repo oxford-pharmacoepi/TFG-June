@@ -1,6 +1,8 @@
 # Unique function to characterise 
 
-VaccineCharacterisation <- function(cohort){
+VaccineCharacterisation <- function(cohort, estimates=c("region", "ethnicity", "sex", "imd",
+                                                        "immunosuppressed", "age_eligibility", 
+                                                        "prior_dose", "dose", "age_group")){
   cohort |>
     summariseCharacteristics(
       tableIntersectCount = list(
@@ -37,9 +39,7 @@ VaccineCharacterisation <- function(cohort){
           window = c(-365, -1)
         )
       ),
-      otherVariables = c("region", "ethnicity", "sex", "imd",
-                         "immunosuppressed", "age_eligibility", 
-                         "prior_dose", "vaccine_dose", "age_group"),
+      otherVariables = estimates,
       estimates = list(immunosuppressed = c("count", "percentage"), 
                        age_eligibility = c("count", "percentage"))
     )

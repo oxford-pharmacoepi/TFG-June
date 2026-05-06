@@ -1,3 +1,4 @@
+##Start Analysis
 omopgenerics::assertNumeric(min_cell_count)
 
 # Create a log file ----
@@ -43,28 +44,49 @@ logMessage("Study cohorts instantiated")
 
 # Cohort counts and attrition ----
 results[["attrition_vaccinated"]] <- summariseCohortAttrition(cdm$vaccinated_within_campaigns)
+results[["attrition_vaccinated_within_campaigns"]] <- summariseCohortAttrition(cdm$vaccinated_within_campaigns)
 results[["attrition_for_coverage"]] <- summariseCohortAttrition(cdm$all_campaigns)
 logMessage("Attritions by campaign and for coverage finished")
+
+
 
 # Run analyses ----
 logMessage("Run study analyses")
 source(here("analyses", "functions.R"))
 logMessage("Defining reusable function to characterise")
-source(here("analyses", "vaccine_characteristics.R"))
+
+# Run Main Analysis
+source(here("analyses/Main_Analysis", "vaccine_characteristics.R"))
 logMessage("Analyses for the vaccinated people and eligibles for each campaign done")
 
-source(here("analyses", "coverage.R"))
+source(here("analyses/Main_Analysis", "coverage.R"))
 logMessage("Coverage analysis finished")
 
-logMessage("Analyses finished")
+source(here("analyses/Main_Analysis", "linear_regression.R"))
+logMessage("Linear Regression Fits finished")
+
+# Run Sensitivity Analysis
+logMessage("Within the sensitivity Analysis:")
+source(here("analyses/Sensitivity_Analysis", "vaccine_characteristics.R"))
+logMessage("Analyses for the vaccinated people and eligibles for each campaign done")
+
+source(here("analyses/Sensitivity_Analysis", "coverage.R"))
+logMessage("Coverage analysis finished")
+
+source(here("analyses/Sensitivity_Analysis", "linear_regression.R"))
+logMessage("Linear Regression Fits finished")
 
 # Capture log file ----
 results[["log"]] <- summariseLogFile(cdmName = omopgenerics::cdmName(cdm))
 
-# Finish ----
+# Finish Main Analysis----
 results$characterisation <- characterisation
 results$characterisation_eligibles <- characterisation_eligibles
 results$summary_campaigns <- summary_campaigns 
+
+results$characterisation_sens <- characterisation
+results$characterisation_eligibles_sens <- characterisation_eligibles
+results$summary_campaigns_sens <- summary_campaigns 
 
 #omopgenerics::tidy(results$summary_campaign1)
 
@@ -77,10 +99,17 @@ exportSummarisedResult(results,
                        path = here("Results"))
 
 # Results to save as csv and plot ----
-# Save data for the local plots of the vaccination chronology 
-#(see "vaccination_chronology" for more info). Should be computed once
-#source(here("analyses", "vaccination_chronology.R"))
-#write.csv(x_dosee, "Results/plot_dosee.csv", row.names = FALSE)
+logMessage("Save data for the local plots of the vaccination chronology") 
+#(see "vaccination_chronology" for more info
+source(here("analyses", "vaccination_chronology.R"))
+
+write.csv(x_dosee, "Results/plot_dosee.csv", row.names = FALSE)
+write.csv(x_dose, "Results/plot_dose.csv", row.names = FALSE)
+write.csv(x_dosee_sens, "Results/plot_dosee_sens.csv", row.names = FALSE)
+
+logMessage("Save data for the local plots of the linear regression fits") 
+write.csv(all_results, "Resultsall_results.csv")
+write.csv(all_results_sens, "Results/all_results_all_results_sens.csv")
 
 cli::cli_alert_success("Study finished")
 
