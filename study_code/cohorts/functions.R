@@ -11,8 +11,9 @@ addIMD <- function(cohort, name = tableName(cohort)){
     imd %in% c(5,6) ~ "Q3",
     imd %in% c(7,8) ~ "Q4",
     imd %in% c(9,10) ~ "Q5")
-    )|>
-    mutate(imd = coalesce(imd, "missing")), by="subject_id") |>
+    ), 
+  by="subject_id") |>
+    mutate(imd = coalesce(imd, "missing")) |>
     compute(name = name) 
   }
 
@@ -21,8 +22,9 @@ addEthnicity <- function(cohort, name = tableName(cohort)){
     left_join(cdm$person|>
                 rename(subject_id=person_id, 
                        ethnicity=race_source_value)|>
-                select(subject_id, ethnicity) |>
-                mutate(ethnicity = coalesce(ethnicity, "missing")), by="subject_id") |>
+                select(subject_id, ethnicity),
+              by="subject_id") |>
+    mutate(ethnicity = coalesce(ethnicity, "missing")) |>
     compute(name = name)
 }
 
@@ -43,7 +45,14 @@ addRegion <- function(cohort,  name = tableName(cohort)) {
         ) |>
         select(location_source_value, person_id) |>
         rename(subject_id = person_id, region = location_source_value)|>
-        mutate(region = coalesce(region, "missing")), by="subject_id") |>
+        mutate(region = if_else(
+          region %in% c("Scotland", "Wales", "Northern Ireland"),
+          region,
+          "England"
+        )), 
+      by="subject_id"
+    ) |>
+    mutate(region = coalesce(region, "missing")) |>
     compute(name = name)
 }
 

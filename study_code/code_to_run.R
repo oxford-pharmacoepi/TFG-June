@@ -49,7 +49,7 @@ cdm <- cdmFromCon(
 )
 #cdm <- readSourceTable(cdm = cdm, name ="othervaccines")
 #cdmlistSourceTables(cdm = cdm)
-#dropSourceTable(cdm = cdm, name = dplyr::everything())
+dropSourceTable(cdm = cdm, name = dplyr::everything())
 
 
 # Run the study
