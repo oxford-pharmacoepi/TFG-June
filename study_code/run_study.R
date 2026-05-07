@@ -43,9 +43,11 @@ logMessage("Vaccinated people within the vaccination campaigns of interest -eith
 logMessage("Study cohorts instantiated")
 
 # Cohort counts and attrition ----
-results[["attrition_vaccinated"]] <- summariseCohortAttrition(cdm$vaccinated_within_campaigns)
+results[["attrition_vaccinated"]] <- summariseCohortAttrition(cdm$vaccine_washout)
 results[["attrition_vaccinated_within_campaigns"]] <- summariseCohortAttrition(cdm$vaccinated_within_campaigns)
+results[["attrition_vaccinated_within_campaigns_sens"]] <- summariseCohortAttrition(cdm$vaccinated_within_campaigns_sens)
 results[["attrition_for_coverage"]] <- summariseCohortAttrition(cdm$all_campaigns)
+results[["attrition_for_coverage_sens"]] <- summariseCohortAttrition(cdm$all_campaigns_sens)
 logMessage("Attritions by campaign and for coverage finished")
 
 
@@ -84,9 +86,9 @@ results$characterisation <- characterisation
 results$characterisation_eligibles <- characterisation_eligibles
 results$summary_campaigns <- summary_campaigns 
 
-results$characterisation_sens <- characterisation
-results$characterisation_eligibles_sens <- characterisation_eligibles
-results$summary_campaigns_sens <- summary_campaigns 
+results$characterisation_sens <- characterisation_sens
+results$characterisation_eligibles_sens <- characterisation_eligibles_sens
+results$summary_campaigns_sens <- summary_campaigns_sens
 
 #omopgenerics::tidy(results$summary_campaign1)
 

@@ -18,8 +18,8 @@ df <- cdm$all_campaigns_sens |>
     sex = factor(sex, levels = c("Female", "Male")),
     prior_dose = factor(prior_dose, levels = as.character(2:9))
   )
-
-for (campaign in c("a_2023", "s_2024", "a_2024", "s_2025")){
+campaigns <- c("a_2023", "s_2024", "a_2024", "s_2025")
+for (campaign in campaigns){
   
   df_campaign <- df |>
     filter(campaign == cohort_name)
@@ -72,10 +72,10 @@ for (campaign in c("a_2023", "s_2024", "a_2024", "s_2025")){
 }
 
 safe_tidy <- purrr::possibly(
-  function(model, prior_name, model_name) {
+  function(model, cohort, model_name) {
     broom::tidy(model, conf.int = TRUE, exponentiate = TRUE) |>
       dplyr::mutate(
-        prior = as.integer(gsub("prior_", "", prior_name)),
+        campaign = cohort_name,
         model = model_name
       )
   },

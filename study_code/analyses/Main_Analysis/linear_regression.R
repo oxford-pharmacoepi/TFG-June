@@ -20,11 +20,11 @@ df <- cdm$all_campaigns |>
   )
 
 fits <- list()
-
-for (campaign in c("a_2023", "s_2024", "a_2024", "s_2025")){
+campaigns <- c("a_2023", "s_2024", "a_2024", "s_2025")
+for (campaign in campaigns){
   
   df_campaign <- df |>
-    filter(campaign == cohort_name)
+    filter(cohort_name == campaign)
   
   fits[[campaign]] <- list(
     
@@ -74,19 +74,19 @@ for (campaign in c("a_2023", "s_2024", "a_2024", "s_2025")){
 }
 
 safe_tidy <- purrr::possibly(
-  function(model, prior_name, model_name) {
+  function(model, cohort_name, model_name) {
     broom::tidy(model, conf.int = TRUE, exponentiate = TRUE) |>
       dplyr::mutate(
-        prior = as.integer(gsub("prior_", "", prior_name)),
+        campaign = cohort_name,
         model = model_name
       )
   },
   otherwise = NULL
 )
 
-all_results <- purrr::imap_dfr(fits, function(model_list, prior_name) {
+all_results <- purrr::imap_dfr(fits, function(model_list, campaign) {
   purrr::imap_dfr(model_list, function(model, model_name) {
-    safe_tidy(model, prior_name, model_name)
+    safe_tidy(model, campaign, model_name)
   })
 })
 
