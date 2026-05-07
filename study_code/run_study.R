@@ -92,10 +92,17 @@ results$summary_campaigns_sens <- summary_campaigns_sens
 
 #omopgenerics::tidy(results$summary_campaign1)
 
-results <- results |>
+result <- results |>
   vctrs::list_drop_empty() |>
+  purrr::imap(\(x, nm) {
+    if (grepl("sens", nm)) {
+      x <- x |>
+        dplyr::mutate(group_level = paste0(group_level, "_sens"))
+    }
+    x
+  }) |>
   omopgenerics::bind()
-exportSummarisedResult(results,
+exportSummarisedResult(result,
                        minCellCount = min_cell_count,
                        fileName = "results_{cdm_name}_{date}.csv",
                        path = here("Results"))

@@ -10,19 +10,17 @@ df <- cdm$all_campaigns_sens |>
     immunosuppressed = factor(immunosuppressed, levels = c(0L, 1L)),
     imd = factor(imd, levels = c("Q3", "Q1", "Q2", "Q4", "Q5")),
     ethnicity = factor(ethnicity, levels = c("white", "black", "asian", "missing")),
-    region = factor(region, levels = c("Scotland", "London", "Wales", 
-                                       "Northern Ireland", "South East",
-                                       "Yorkshire & The Humber", "West Midlands",
-                                       "North East", "North West", "East of England",
-                                       "East Midlands", "South West")),
+    region = factor(region, levels = c("Scotland", "Wales", "England")),
     sex = factor(sex, levels = c("Female", "Male")),
     prior_dose = factor(prior_dose, levels = as.character(2:9))
   )
+
+fits <- list()
 campaigns <- c("a_2023", "s_2024", "a_2024", "s_2025")
 for (campaign in campaigns){
   
   df_campaign <- df |>
-    filter(campaign == cohort_name)
+    filter(cohort_name == campaign)
   
   fits[[campaign]] <- list(
     
@@ -72,7 +70,7 @@ for (campaign in campaigns){
 }
 
 safe_tidy <- purrr::possibly(
-  function(model, cohort, model_name) {
+  function(model, cohort_name, model_name) {
     broom::tidy(model, conf.int = TRUE, exponentiate = TRUE) |>
       dplyr::mutate(
         campaign = cohort_name,
@@ -82,9 +80,9 @@ safe_tidy <- purrr::possibly(
   otherwise = NULL
 )
 
-all_results_sens <- purrr::imap_dfr(fits, function(model_list, prior_name) {
+all_results_sens <- purrr::imap_dfr(fits, function(model_list, campaign) {
   purrr::imap_dfr(model_list, function(model, model_name) {
-    safe_tidy(model, prior_name, model_name)
+    safe_tidy(model, campaign, model_name)
   })
 })
 

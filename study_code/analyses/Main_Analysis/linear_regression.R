@@ -10,11 +10,8 @@ df <- cdm$all_campaigns |>
     immunosuppressed = factor(immunosuppressed, levels = c(0L, 1L)),
     imd = factor(imd, levels = c("Q3", "Q1", "Q2", "Q4", "Q5")),
     ethnicity = factor(ethnicity, levels = c("white", "black", "asian", "missing")),
-    region = factor(region, levels = c("Scotland", "London", "Wales", 
-                                       "Northern Ireland", "South East",
-                                       "Yorkshire & The Humber", "West Midlands",
-                                       "North East", "North West", "East of England",
-                                       "East Midlands", "South West")),
+    region = factor(region, levels = c("Scotland", "Wales", 
+                                       "Northern Ireland", "England")),
     sex = factor(sex, levels = c("Female", "Male")),
     prior_dose = factor(prior_dose, levels = as.character(2:9))
   )
