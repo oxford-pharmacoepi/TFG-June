@@ -101,15 +101,18 @@ exportSummarisedResult(results,
 # Results to save as csv and plot ----
 logMessage("Save data for the local plots of the vaccination chronology") 
 #(see "vaccination_chronology" for more info
-source(here("analyses", "vaccination_chronology.R"))
+source(here("analyses/Main_Analysis", "vaccination_chronology.R"))
 
 write.csv(x_dosee, "Results/plot_dosee.csv", row.names = FALSE)
 write.csv(x_dose, "Results/plot_dose.csv", row.names = FALSE)
+source(here("analyses/Sensitivity_Analysis", "vaccination_chronology.R"))
 write.csv(x_dosee_sens, "Results/plot_dosee_sens.csv", row.names = FALSE)
 
 logMessage("Save data for the local plots of the linear regression fits") 
-write.csv(all_results, "Resultsall_results.csv")
-write.csv(all_results_sens, "Results/all_results_all_results_sens.csv")
+source(here("analyses/Main_Analysis", "linear_regression.R"))
+write.csv(all_results, "Results/all_results.csv")
+source(here("analyses/Sensitivity_Analysis", "linear_regression.R"))
+write.csv(all_results_sens, "Results/all_results_sens.csv")
 
 cli::cli_alert_success("Study finished")
 

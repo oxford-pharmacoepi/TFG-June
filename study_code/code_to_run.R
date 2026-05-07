@@ -47,9 +47,9 @@ cdm <- cdmFromCon(
   cdmName = dbName,
   achillesSchema = achilles_schema #,cohortTables = c()
 )
-#cdm <- readSourceTable(cdm = cdm, name ="othervaccines")
+#cdm <- readSourceTable(cdm = cdm, name ="vaccinated_within_campaigns_sens")
 #cdmlistSourceTables(cdm = cdm)
-dropSourceTable(cdm = cdm, name = dplyr::everything())
+#dropSourceTable(cdm = cdm, name = dplyr::everything())
 
 
 # Run the study

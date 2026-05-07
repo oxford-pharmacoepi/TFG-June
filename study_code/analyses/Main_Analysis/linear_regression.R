@@ -1,7 +1,8 @@
 # Lineal Regression to analyse the relation between ethnicity, sex, region,
 # age group, quintile (and number of doses??) within vaccinated and unvaccinated individuals
 df <- cdm$all_campaigns |>
-  select(vaccinated, age_group, immunosuppressed, imd, ethnicity, region, sex, prior_dose) |>
+  select(vaccinated, age_group, immunosuppressed, imd, ethnicity, region, sex, 
+         prior_dose, cohort_name) |>
   collect() |>
   mutate(
     age_group = factor(age_group, levels = c("65-74", "75-84", "85-94", ">=95",
@@ -20,53 +21,53 @@ df <- cdm$all_campaigns |>
 
 fits <- list()
 
-for (prior in 2L:9L){
+for (campaign in c("a_2023", "s_2024", "a_2024", "s_2025")){
   
-  df_prior <- df |>
-    filter(prior_dose == prior)
+  df_campaign <- df |>
+    filter(campaign == cohort_name)
   
-  fits[[paste0("prior_", prior)]] <- list(
+  fits[[campaign]] <- list(
     
     fit_agr = glm(
       vaccinated ~ age_group,
       family = binomial(link = "logit"),
-      data = df_prior
+      data = df_campaign
     ),
     
     fit_agr_sex = glm(
       vaccinated ~ age_group + sex,
       family = binomial(link = "logit"),
-      data = df_prior
+      data = df_campaign
     ),
     
     fit_agr_sex_eth = glm(
       vaccinated ~ age_group + ethnicity + sex,
       family = binomial(link = "logit"),
-      data = df_prior
+      data = df_campaign
     ),
     
     fit_agr_sex_reg = glm(
       vaccinated ~ age_group + region + sex,
       family = binomial(link = "logit"),
-      data = df_prior
+      data = df_campaign
     ),
     
     fit_agr_sex_imd = glm(
       vaccinated ~ age_group + imd + sex,
       family = binomial(link = "logit"),
-      data = df_prior
+      data = df_campaign
     ),
     
     fit_agr_sex_immuno = glm(
       vaccinated ~ age_group + immunosuppressed + sex,
       family = binomial(link = "logit"),
-      data = df_prior
+      data = df_campaign
     ),
     
     fit_all = glm(
       vaccinated ~ age_group + immunosuppressed + imd + region + ethnicity + sex,
       family = binomial(link = "logit"),
-      data = df_prior
+      data = df_campaign
     )
     
   )
