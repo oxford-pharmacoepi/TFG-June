@@ -15,7 +15,7 @@ addIMD <- function(cohort, name = tableName(cohort)){
   by="subject_id") |>
     mutate(imd = coalesce(imd, "missing")) |>
     compute(name = name) 
-  }
+}
 
 addEthnicity <- function(cohort, name = tableName(cohort)){
   cohort|>
