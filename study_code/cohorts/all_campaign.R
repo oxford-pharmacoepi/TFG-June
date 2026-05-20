@@ -4,11 +4,12 @@ campaigns <- c("a_2023", "s_2024", "a_2024", "s_2025")
 
 for (campaign in campaigns){
 cdm[[campaign]] <- cdm$demo |>
-  copyCohorts(n = 1, name = campaign) |>
-  trimDatesIntoCampaign(campaign) |>
+  #copyCohorts(n = 1, name = campaign) |>
+  trimDatesIntoCampaign(campaign, name = campaign) |>
   addVaccinatedInCampaign() |>
   addImmunosuppressed() |>
-  addDemographics(age =TRUE,
+  addDemographics(indexDate = "cohort_end_date",
+                  age =TRUE,
                   sex = TRUE,
                   name = campaign) |>
   filter(if_else(campaign == "a_2023", 
