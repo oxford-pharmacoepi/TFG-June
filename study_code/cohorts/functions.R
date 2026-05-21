@@ -15,7 +15,7 @@ addIMD <- function(cohort, name = tableName(cohort)){
   by="subject_id") |>
     mutate(imd = coalesce(imd, "missing")) |>
     compute(name = name) 
-  }
+}
 
 addEthnicity <- function(cohort, name = tableName(cohort)){
   cohort|>
@@ -75,6 +75,7 @@ addImmunosuppressed <-  function(cohort, name = tableName(cohort)) {
   cohort |>
     addCohortIntersectFlag(
       targetCohortTable = "immunosuppressed",
+      indexDate = "cohort_end_date",
       targetCohortId = c(
         "cancerexcludnonmelaskincancer", "hiv_aids", "intrinsec_immune",
         "autoimmune", "transplant", "scid"
@@ -85,6 +86,7 @@ addImmunosuppressed <-  function(cohort, name = tableName(cohort)) {
     ) |>
     addCohortIntersectFlag(
       targetCohortTable = "immunosuppressed",
+      indexDate = "cohort_end_date",
       targetCohortId = c(
         "immunos_antineo", "immunos_antineo_exclude", "syst_corticosteriods"
       ),
@@ -172,7 +174,7 @@ addVaccinatedInCampaign <- function(cohort, name = tableName(cohort)){
     compute(name = name)
 }
 
-trimDatesIntoCampaign <- function(cohort, campaign) {
+trimDatesIntoCampaign <- function(cohort, campaign, name = tableName(cohort)) {
   start <- switch(campaign,
      "a_2023" = as.Date("2023-10-02"),
      "s_2024" = as.Date("2024-04-15"),
@@ -190,7 +192,9 @@ trimDatesIntoCampaign <- function(cohort, campaign) {
 
   cohort|>
     trimToDateRange(c(start, end)) |>
-    requirePriorObservation(minPriorObservation = 365)
+    compute(name = name)
+   # requirePriorObservation(minPriorObservation = 365,
+  # name = name)
 }
 
 addAgeEligibility <- function(cohort, name = tableName(cohort), campaign) {
@@ -199,7 +203,7 @@ addAgeEligibility <- function(cohort, name = tableName(cohort), campaign) {
         mutate(age_eligibility=case_when(
       (vaccination_campaign == "a_2023") & age >= 65 ~ 1L, 
       (vaccination_campaign == "s_2024") & age >= 75 ~ 1L,
-      (vaccination_campaign == "a_2024") & age >= 75 ~ 1L,
+      (vaccination_campaign == "a_2024") & age >= 65 ~ 1L,
       (vaccination_campaign == "s_2025") & age >= 75 ~ 1L,
       (vaccination_campaign == "a_2025") & age >= 75 ~ 1L,
   TRUE ~ 0L)) |>
@@ -210,7 +214,7 @@ addAgeEligibility <- function(cohort, name = tableName(cohort), campaign) {
     mutate(age_eligibility=case_when(
       (campaign == "a_2023") & age >= 65 ~ 1L, 
       (campaign == "s_2024") & age >= 75 ~ 1L,
-      (campaign == "a_2024") & age >= 75 ~ 1L,
+      (campaign == "a_2024") & age >= 65 ~ 1L,
       (campaign == "s_2025") & age >= 75 ~ 1L,
       (campaign == "a_2025") & age >= 75 ~ 1L,
       TRUE ~ 0L)) |>
