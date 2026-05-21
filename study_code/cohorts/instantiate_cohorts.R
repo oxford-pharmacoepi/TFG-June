@@ -4,7 +4,8 @@
 cdm$vaccine <- conceptCohort(cdm = cdm,
                              conceptSet = diagnosis["covid_vaccine"],
                              name = "vaccine"
-                             )
+                             ) 
+  
 
 # Vaccine record with 21 days washout between the first and second dose
 cdm$vaccine_washout1 <- cdm$vaccine |> 
@@ -61,12 +62,13 @@ cdm$demo <- demographicsCohort(cdm, name = "demo") |>
   # to consider to add this with demo cohort
   addRegion() |>
   addIMD() |>
-  addEthnicity(name="demo") 
+  addEthnicity() |>
+  requireInDateRange(dateRange = as.Date(c(NA, "2021-01-01")), name = "demo")
   
   
-# Denominator for sensitivity analysis  
-cdm$demo_sens <- cdm$demo |>
-  requireInDateRange(dateRange = as.Date(c(NA, "2021-01-01")), name = "demo_sens")
+# # Denominator for sensitivity analysis  
+# cdm$demo_sens <- cdm$demo |>
+#   requireInDateRange(dateRange = as.Date(c(NA, "2021-01-01")), name = "demo_sens")
 
 # Other vaccines:
 cdm$othervaccines <- conceptCohort(cdm = cdm, 

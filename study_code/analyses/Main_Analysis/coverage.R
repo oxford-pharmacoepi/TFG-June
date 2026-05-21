@@ -3,8 +3,8 @@
 summary_campaigns <- summariseResult(
   table = cdm$all_campaigns,
   group = "cohort_name",
-  strata = list(c("region", "imd", "sex", "ethnicity", "prior_dose", 
-                           "immunosuppressed", "age_group", "age_eligibility")), 
+  strata = list("region", "imd", "sex", "ethnicity", "prior_dose", 
+                           "immunosuppressed", "age_group", "age_eligibility"), 
   variables = list(c("vaccinated")),
   estimates = list(c("count", "percentage"))
   )

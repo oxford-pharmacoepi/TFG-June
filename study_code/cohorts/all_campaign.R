@@ -29,7 +29,7 @@ cdm[[campaign]] <- cdm$demo |>
   compute(name = campaign)|>
   recordCohortAttrition(reason = "At least 2 doses at campaign start") |>
   addAgeEligibility(campaign = campaign) |>
-  addSensitivity() |>
+  #addSensitivity() |>
   addOtherVaccines() |>
   addComorbidities(name = campaign)
 }
@@ -47,12 +47,12 @@ cdm$all_campaigns <- cdm$all_campaigns |>
   compute(name = "all_campaigns")
 
 #Will be used for sensitivity analysis
-cdm$all_campaigns_sens <- cdm$all_campaigns |>
-  filter(satisfy_sensitivity == 1L) |>
-  compute(name = "all_campaigns_sens")|>
-  recordCohortAttrition(reason = "Sensitivity analysis (In observation 2021-01-01
-                        - Vaccination Date)")
-      
+# cdm$all_campaigns_sens <- cdm$all_campaigns |>
+#   filter(satisfy_sensitivity == 1L) |>
+#   compute(name = "all_campaigns_sens")|>
+#   recordCohortAttrition(reason = "Sensitivity analysis (In observation 2021-01-01
+#                         - Vaccination Date)")
+#       
       
 
 

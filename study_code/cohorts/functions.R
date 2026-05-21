@@ -262,7 +262,7 @@ addOtherVaccines <- function(cohort,
                              window = list(other_vaccines_on_index = c(0, 0)),
                              name = tableName(cohort)) {
   
-  window_name <- names(window)[1]
+  window_name <- names(window)
   
   cohort |>
     addCohortIntersectFlag(
@@ -270,13 +270,5 @@ addOtherVaccines <- function(cohort,
       window = window,
       name = name
     ) |>
-    mutate(
-      othervaccines = if_else(
-        if_any(all_of(window_name), ~ .x == 1L),
-        1L,
-        0L
-      )
-    ) |>
-    select(all_of(c(colnames(cohort), window_name))) |>
     compute(name = name)
 }

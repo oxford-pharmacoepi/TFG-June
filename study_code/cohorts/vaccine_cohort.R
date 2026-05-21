@@ -9,16 +9,16 @@ cdm$vaccinated_within_campaigns <- cdm$all_campaigns |>
 
 
 
-# For sensitivity analysis
-cdm$vaccinated_within_campaigns_sens <- cdm$all_campaigns_sens |>
-  left_join(cdm$vaccinated_within_campaigns, 
-            by = intersect(
-              colnames(cdm$all_campaigns_sens),
-              colnames(cdm$vaccinated_within_campaigns)
-              )
-            )|>
-  filter(vaccinated == 1) |>
-  compute(name = "vaccinated_within_campaigns_sens") |>
-  recordCohortAttrition(reason = "Vaccinated within campaigns of interest") 
+# # For sensitivity analysis
+# cdm$vaccinated_within_campaigns_sens <- cdm$all_campaigns_sens |>
+#   left_join(cdm$vaccinated_within_campaigns, 
+#             by = intersect(
+#               colnames(cdm$all_campaigns_sens),
+#               colnames(cdm$vaccinated_within_campaigns)
+#               )
+#             )|>
+#   filter(vaccinated == 1) |>
+#   compute(name = "vaccinated_within_campaigns_sens") |>
+#   recordCohortAttrition(reason = "Vaccinated within campaigns of interest") 
 
 
