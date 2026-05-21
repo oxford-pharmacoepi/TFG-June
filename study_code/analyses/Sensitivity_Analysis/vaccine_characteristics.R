@@ -5,7 +5,7 @@ characterisation_sens <- cdm$vaccinated_within_campaigns_sens |>
   VaccineCharacterisation()
 
 characterisation_eligibles_sens <- cdm$all_campaigns_sens |>
-  VaccineCharacterisation(estimates=c("region", "ethnicity", "sex", "imd",
+  VaccineCharacterisation(estimates=c("region", "ethnicity", "imd",
                                       "immunosuppressed", "age_eligibility", 
                                       "prior_dose", "age_group"))
 

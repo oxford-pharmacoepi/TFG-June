@@ -3,9 +3,10 @@
 summary_campaigns_sens <- summariseResult(
   table = cdm$all_campaigns_sens,
   group = "cohort_name",
-  strata = combineStrata(c("region", "imd", "sex", "ethnicity", "prior_dose")), 
+  strata = list(c("region", "imd", "sex", "ethnicity", "prior_dose", 
+                  "immunosuppressed", "age_group", "age_eligibility")), 
   variables = list(c("vaccinated")),
   estimates = list(c("count", "percentage"))
-  )
+)
 
 #visOmopResults::visOmopTable(summary_campaigns, , header = c("prior_dose"))

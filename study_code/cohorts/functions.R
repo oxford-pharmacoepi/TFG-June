@@ -233,3 +233,46 @@ addSensitivity <- function(cohort, name = tableName(cohort)) {
     compute(name = name)
   
 }
+
+addComorbidities <- function(cohort, name = tableName(cohort)) {
+  cohort|>
+    addCohortIntersectFlag(
+          targetCohortTable = "comorbidities",
+          window = list("flag_any_time_prior_comorbidities" = c(-Inf, -1)),
+          name = name
+          ) |>
+    # addCohortIntersectCount(
+    #   targetCohortTable = "othervaccines",
+    #   window = list("count_any_time_prior_vaccination" = c(-Inf, -1),
+    #                 "count_last_year_vaccination" =  c(-365, -1)),
+    #   #nameStyle = "{window_name}",
+    #   name = name
+    # )|>
+    mutate(comorbidities = if_else(if_any(c(contains("flag_any_time_prior_comorbidities")), ~.x== 1L), 
+           1L, 0L))|>
+    select(c(colnames(cohort),"comorbidities")) |>
+    compute(name = name)
+}
+
+addOtherVaccines <- function(cohort,
+                             window = list(other_vaccines_on_index = c(0, 0)),
+                             name = tableName(cohort)) {
+  
+  window_name <- names(window)[1]
+  
+  cohort |>
+    addCohortIntersectFlag(
+      targetCohortTable = "othervaccines",
+      window = window,
+      name = name
+    ) |>
+    mutate(
+      othervaccines = if_else(
+        if_any(all_of(window_name), ~ .x == 1L),
+        1L,
+        0L
+      )
+    ) |>
+    select(all_of(c(colnames(cohort), window_name))) |>
+    compute(name = name)
+}

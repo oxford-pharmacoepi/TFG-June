@@ -1,16 +1,12 @@
 # Unique function to characterise 
 
-VaccineCharacterisation <- function(cohort, estimates=c("region", "ethnicity", "sex", "imd",
+VaccineCharacterisation <- function(cohort, tableintersects = TRUE, 
+                                    estimates=c("region", "ethnicity", "sex", "imd",
                                                         "immunosuppressed", "age_eligibility", 
-                                                        "prior_dose", "dose", "age_group")){
-  cohort |>
-    summariseCharacteristics(
-      tableIntersectCount = list(
-        "Number visits in the prior year" = list(
-          tableName = "visit_occurrence",
-          window = c(-365, -1)
-        )
-      ),
+                                                        "prior_dose", "dose", 
+                                                        "age_group")){
+  intersect_args <- if (tableintersects) {
+    list(
       cohortIntersectFlag = list(
         "flag_any_time_prior_vaccination" = list(
           targetCohortTable = "othervaccines",
@@ -38,9 +34,32 @@ VaccineCharacterisation <- function(cohort, estimates=c("region", "ethnicity", "
           targetCohortTable = "othervaccines",
           window = c(-365, -1)
         )
-      ),
-      otherVariables = estimates,
-      estimates = list(immunosuppressed = c("count", "percentage"), 
-                       age_eligibility = c("count", "percentage"))
+      )
     )
+  }
+  else {
+    list()
+  }
+  
+  do.call(
+    summariseCharacteristics,
+    c(
+      list(
+        cohort = cohort,
+        tableIntersectCount = list(
+          "Number visits in the prior year" = list(
+            tableName = "visit_occurrence",
+            window = c(-365, -1)
+          )
+        ),
+        otherVariables = estimates,
+        estimates = list(
+          immunosuppressed = c("count", "percentage"),
+          age_eligibility = c("count", "percentage")
+        )
+      ),
+      intersect_args
+    )
+  )
 }
+

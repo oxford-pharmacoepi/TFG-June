@@ -66,20 +66,7 @@ cdm$demo <- demographicsCohort(cdm, name = "demo") |>
   
 # Denominator for sensitivity analysis  
 cdm$demo_sens <- cdm$demo |>
-  copyCohorts(n = 1, name = "demosens") |>
   requireInDateRange(dateRange = as.Date(c(NA, "2021-01-01")), name = "demo_sens")
-
-# Immunosuppressed 
-cdm$immunosuppressed <- conceptCohort(cdm = cdm, 
-                                      name = "immunosuppressed", 
-                                      conceptSet = immuno,
-                                      exit = "event_start_date")
-
-cdm$immunosuppressed <- cdm$immunosuppressed |>
-  addCohortName()|>
-  compute(name = "immunosuppressed")
-
-# Objective 1: Characterisation
 
 # Other vaccines:
 cdm$othervaccines <- conceptCohort(cdm = cdm, 
@@ -87,9 +74,22 @@ cdm$othervaccines <- conceptCohort(cdm = cdm,
                                    conceptSet = vaccines,
                                    useSourceFields = TRUE,
                                    exit = "event_start_date",
-                                   subsetCohort = "vaccine_washout")
+                                   subsetCohort = "demo")
 # Comorbidities
 cdm$comorbidities <- conceptCohort(cdm = cdm, 
                                    name = "comorbidities", 
                                    conceptSet = comorbidities,
-                                   subsetCohort = "vaccine_washout")
+                                   subsetCohort = "demo")
+
+# Immunosuppressed 
+cdm$immunosuppressed <- conceptCohort(cdm = cdm, 
+                                      name = "immunosuppressed", 
+                                      conceptSet = immuno,
+                                      exit = "event_start_date",
+                                      subsetCohort = "demo")
+
+cdm$immunosuppressed <- cdm$immunosuppressed |>
+  addCohortName()|>
+  compute(name = "immunosuppressed")
+
+
