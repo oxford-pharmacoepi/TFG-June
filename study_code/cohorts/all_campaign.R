@@ -2,7 +2,7 @@
 
 #Age Group Parameter
 ageGroups <- list(
-  "=<34"=c(0, 34), "35-45"=c(35, 44), "45-54"=c(45,54), 
+  "=<34"=c(0, 34), "35-44"=c(35, 44), "45-54"=c(45,54), 
   "55-64"=c(55,64), "65-74"=c(65,74), "75-84"=c(75,84),
   "85-94"=c(85,94), ">=95"=c(95,120))
 
@@ -10,10 +10,10 @@ campaigns <- c("a_2023", "s_2024", "a_2024", "s_2025")
 
 for (campaign in campaigns){
 cdm[[campaign]] <- cdm$demo |>
-  #copyCohorts(n = 1, name = campaign) |>
+  copyCohorts(n = 1, name = campaign) |>
   trimDatesIntoCampaign(campaign, name = campaign) |>
-  addVaccinatedInCampaign() |>
   addImmunosuppressed() |>
+  addVaccinatedInCampaign() |> 
   addDemographics(indexDate = "cohort_end_date",
                   age =TRUE,
                   sex = TRUE,

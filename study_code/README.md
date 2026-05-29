@@ -1,12 +1,12 @@
-# Study name:
+# Coverage and effectiveness of COVID-19 booster campaigns: a real-world analysis of UK primary care data
 
 <img src="https://img.shields.io/badge/Study%20Status-Started-blue.svg" alt="Study Status: Started"/>
 
-Brief description of the study
+Brief description
 
-## Instructions to run the study diagnostics
+## Instructions to run the project
 
-1)  Download this entire repository (you can download as a zip folder using Code -\> Download ZIP, or you can use GitHub Desktop).
+1)  Download the entire repository (you can download as a zip folder using Code -\> Download ZIP, or you can use GitHub Desktop).
 2)  Open the project <i>StudyCode.Rproj</i> from the StudyCode directory in RStudio (when inside the project, you will see its name on the top-right of your RStudio session)
 3)  Open the code_to_run.R file - this is the only file you should need to interact with.
 
