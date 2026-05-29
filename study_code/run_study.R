@@ -67,17 +67,6 @@ logMessage("Coverage analysis finished")
 source(here("analyses/Main_Analysis", "linear_regression.R"))
 logMessage("Linear Regression Fits finished")
 
-# # Run Sensitivity Analysis
-# logMessage("Within the sensitivity Analysis:")
-# source(here("analyses/Sensitivity_Analysis", "vaccine_characteristics.R"))
-# logMessage("Analyses for the vaccinated people and eligibles for each campaign done")
-# 
-# source(here("analyses/Sensitivity_Analysis", "coverage.R"))
-# logMessage("Coverage analysis finished")
-# 
-# source(here("analyses/Sensitivity_Analysis", "linear_regression.R"))
-# logMessage("Linear Regression Fits finished")
-
 # Capture log file ----
 results[["log"]] <- summariseLogFile(cdmName = omopgenerics::cdmName(cdm))
 
@@ -85,10 +74,6 @@ results[["log"]] <- summariseLogFile(cdmName = omopgenerics::cdmName(cdm))
 results$characterisation <- characterisation
 results$characterisation_eligibles <- characterisation_eligibles
 results$summary_campaigns <- summary_campaigns 
-
-# results$characterisation_sens <- characterisation_sens
-# results$characterisation_eligibles_sens <- characterisation_eligibles_sens
-# results$summary_campaigns_sens <- summary_campaigns_sens
 
 #omopgenerics::tidy(results$summary_campaign1)
 
@@ -114,13 +99,12 @@ source(here("analyses/Main_Analysis", "vaccination_chronology.R"))
 
 write.csv(x_dosee, "Results/plot_dosee.csv", row.names = FALSE)
 write.csv(x_dose, "Results/plot_dose.csv", row.names = FALSE)
-# source(here("analyses/Sensitivity_Analysis", "vaccination_chronology.R"))
-# write.csv(x_dosee_sens, "Results/plot_dosee_sens.csv", row.names = FALSE)
+write.csv(sex_imd_eth_reg_immuno_ag_pd, "Results/sex_imd_eth_reg_immuno_ag_pd.csv",
+          row.names = FALSE)
 
 logMessage("Save data for the local plots of the linear regression fits") 
 write.csv(all_results, "Results/all_results.csv")
-# source(here("analyses/Sensitivity_Analysis", "linear_regression.R"))
-# write.csv(all_results_sens, "Results/all_results_sens.csv")
+
 
 cli::cli_alert_success("Study finished")
 

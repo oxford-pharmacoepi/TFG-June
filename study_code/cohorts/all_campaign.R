@@ -13,12 +13,12 @@ cdm[[campaign]] <- cdm$demo |>
   copyCohorts(n = 1, name = campaign) |>
   trimDatesIntoCampaign(campaign, name = campaign) |>
   addImmunosuppressed() |>
-  addVaccinatedInCampaign() |> 
   addDemographics(indexDate = "cohort_end_date",
                   age =TRUE,
                   sex = TRUE,
                   name = campaign,
                   ageGroup = ageGroups) |>
+  addVaccinatedInCampaign() |> 
   filter(if_else(campaign == "a_2023", 
                  age >= 75L | immunosuppressed_campaign == 1L |
                    immunosuppressed_prior == 1L, 
