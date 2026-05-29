@@ -20,8 +20,10 @@ cdm[[campaign]] <- cdm$demo |>
                   name = campaign,
                   ageGroup = ageGroups) |>
   filter(if_else(campaign == "a_2023", 
-                 age >= 75L | immunosuppressed == 1L, 
-                 age >= 65L | immunosuppressed == 1L)) |>
+                 age >= 75L | immunosuppressed_campaign == 1L |
+                   immunosuppressed_prior == 1L, 
+                 age >= 65L | immunosuppressed_campaign == 1L |
+                   immunosuppressed_prior == 1L)) |>
   compute(name = campaign)|>
   recordCohortAttrition(reason = "Eligible for vaccination") |>
   addDosePriorCampaign(name = campaign) |>
