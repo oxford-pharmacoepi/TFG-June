@@ -2,7 +2,7 @@
 
 #Age Group Parameter
 ageGroups <- list(
-  "=<34"=c(0, 34), "35-44"=c(35, 44), "45-54"=c(45,54), 
+  "<=34"=c(0, 34), "35-44"=c(35, 44), "45-54"=c(45,54), 
   "55-64"=c(55,64), "65-74"=c(65,74), "75-84"=c(75,84),
   "85-94"=c(85,94), ">=95"=c(95,120))
 
@@ -12,18 +12,16 @@ for (campaign in campaigns){
 cdm[[campaign]] <- cdm$demo |>
   copyCohorts(n = 1, name = campaign) |>
   trimDatesIntoCampaign(campaign, name = campaign) |>
-  addImmunosuppressed() |>
-  addDemographics(indexDate = "cohort_end_date",
+  addImmunosuppressed() |> 
+  addDemographics(indexDate = "cohort_start_date",
                   age =TRUE,
                   sex = TRUE,
                   name = campaign,
                   ageGroup = ageGroups) |>
   addVaccinatedInCampaign() |> 
-  filter(if_else(campaign == "a_2023", 
-                 age >= 75L | immunosuppressed_campaign == 1L |
-                   immunosuppressed_prior == 1L, 
-                 age >= 65L | immunosuppressed_campaign == 1L |
-                   immunosuppressed_prior == 1L)) |>
+  filter(if_else(campaign %in% c("a_2023", "a_2024"), 
+                 age >= 65L | immunosuppressed == 1L, 
+                 age >= 75L | immunosuppressed == 1L)) |>
   compute(name = campaign)|>
   recordCohortAttrition(reason = "Eligible for vaccination") |>
   addDosePriorCampaign(name = campaign) |>

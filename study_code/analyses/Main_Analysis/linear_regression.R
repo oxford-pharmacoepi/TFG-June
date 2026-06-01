@@ -6,8 +6,8 @@ df <- cdm$all_campaigns |>
          prior_dose, cohort_name) |>
   collect(name ="df") |> 
   mutate(
-    age_group = factor(age_group, levels = c("65-74", "75-84", "85-94", ">=95",
-                                             "=<34", "35-44", "45-54", "55-64")),
+    age_group = factor(age_group, levels = c("75-84", "65-74", "85-94", ">=95",
+                                             "<=34", "35-44", "45-54", "55-64")),
     immunosuppressed = factor(immunosuppressed, levels = c(0L, 1L)),
     imd = factor(imd, levels = c("Q3", "Q1", "Q2", "Q4", "Q5")),
     ethnicity = factor(ethnicity, levels = c("white", "black", "asian", "missing")),

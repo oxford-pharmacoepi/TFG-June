@@ -30,7 +30,7 @@ vaccines <- importCodelist(here::here("codelist", "vaccines"), type = "csv")
 source(here("cohorts", "functions.R"))
 logMessage("Codelists and functions to be used imported")
 
-source(here("cohorts", "instantiate_cohorts.R")) 
+#source(here("cohorts", "instantiate_cohorts.R")) 
 logMessage("Vaccinated people identified by campaign")
 
 source(here("cohorts", "all_campaign.R")) 

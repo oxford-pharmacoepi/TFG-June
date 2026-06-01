@@ -2,7 +2,7 @@
 
 VaccineCharacterisation <- function(cohort, tableintersects = TRUE, 
                                     estimates=c("region", "ethnicity", "sex", "imd",
-                                                "immunosuppressed_prior", "immunosuppressed_campaign",
+                                                "immunosuppressed",
                                                 "age_eligibility", "prior_dose", "dose", 
                                                 "age_group")){
   intersect_args <- if (tableintersects) {

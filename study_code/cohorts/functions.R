@@ -71,7 +71,7 @@ addCampaigns <- function(cohort, name = tableName(cohort)){
     compute(name = name)
 }
 
-addImmunosuppressedPrior <-  function(cohort,
+addImmunosuppressed <-  function(cohort,
                                  name = tableName(cohort)) {
   cohort |>
     addCohortIntersectFlag(
@@ -95,13 +95,13 @@ addImmunosuppressedPrior <-  function(cohort,
       nameStyle = "{cohort_name}",
       name = name
     ) |>
-    mutate(immunosuppresed_prior = case_when(
+    mutate(immunosuppressed = case_when(
       cancerexcludnonmelaskincancer + hiv_aids + intrinsec_immune +
         immunos_antineo + immunos_antineo_exclude + scid > 0L ~ 1L,
       syst_corticosteriods == 1L & autoimmune + transplant > 0L ~ 1L,
       TRUE ~  0L
     )) |>
-    select(c(colnames(cohort), "immunosuppresed_prior")) |>
+    select(c(colnames(cohort), "immunosuppressed")) |>
     compute(name = name)
 }
 
@@ -131,13 +131,13 @@ addImmunosuppressedInCampaign <-  function(cohort,
       nameStyle = "{cohort_name}",
       name = name
     ) |>
-    mutate(immunosuppresed_campaign = case_when(
+    mutate(immunosuppressed_campaign = case_when(
       cancerexcludnonmelaskincancer + hiv_aids + intrinsec_immune +
         immunos_antineo + immunos_antineo_exclude + scid > 0L ~ 1L,
       syst_corticosteriods == 1L & autoimmune + transplant > 0L ~ 1L,
       TRUE ~  0L
     )) |>
-    select(c(colnames(cohort), "immunosuppresed_campaign")) |>
+    select(c(colnames(cohort), "immunosuppressed_campaign")) |>
     compute(name = name)
 }
 

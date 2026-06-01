@@ -4,6 +4,6 @@
 # IMD and prior dose
 
 sex_imd_eth_reg_immuno_ag_pd <- all_campaigns |>
-  group_by(cohort_name, sex, immunosuppressed_campaign, immunosuppressed_prior,
+  group_by(cohort_name, sex, immunosuppressed,
            age_group, ethnicity, imd, region, prior_dose, vaccinated) |>
   tally()

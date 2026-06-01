@@ -64,11 +64,6 @@ cdm$demo <- demographicsCohort(cdm, name = "demo") |>
   addIMD() |>
   addEthnicity() |>
   requireInDateRange(dateRange = as.Date(c(NA, "2021-01-01")), name = "demo")
-  
-  
-# # Denominator for sensitivity analysis  
-# cdm$demo_sens <- cdm$demo |>
-#   requireInDateRange(dateRange = as.Date(c(NA, "2021-01-01")), name = "demo_sens")
 
 # Other vaccines:
 cdm$othervaccines <- conceptCohort(cdm = cdm, 
