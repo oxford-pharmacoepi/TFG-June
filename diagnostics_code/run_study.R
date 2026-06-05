@@ -1,5 +1,5 @@
 # create logger ----
-resultsFolder <- here("results")
+resultsFolder <- here("Results")
 if(!dir.exists(resultsFolder)){
   dir.create(resultsFolder)
 }
@@ -17,8 +17,17 @@ diagnostics <- phenotypeDiagnostics(cdm$all_cohorts,
 exportSummarisedResult(diagnostics,
                        minCellCount = minCellCount,
                        fileName = "phenotyper_results_{cdm_name}_{date}.csv",
-                       path = here("results")
+                       path = here("Results")
                        )
-shinyDiagnostics(result = diagnostics, directory = here(".."), open = TRUE)
+
+if (dir.exists(here("../diagnostics_shiny"))) {
+  unlink("diagnostics_shiny", recursive = TRUE)
+}
+
+shinyDiagnostics(
+  result = diagnostics,
+  directory = here("../diagnostics_shiny"),
+  open = TRUE
+)
 runApp()
 logMessage("Finished")

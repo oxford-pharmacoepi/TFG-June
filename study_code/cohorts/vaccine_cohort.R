@@ -4,8 +4,7 @@
 cdm$vaccinated_within_campaigns <- cdm$all_campaigns |>
   filter(vaccinated == 1) |>
   compute(name = "vaccinated_within_campaigns") |>
-  recordCohortAttrition(reason = "Vaccinated within campaigns of interest")|>
-  addComorbidities(name = "vaccinated_within_campaigns")
+  recordCohortAttrition(reason = "Vaccinated within campaign of interest")
 
 
 

@@ -59,11 +59,27 @@ cdm$vaccine_washout <- cdm$vaccine_washout1 |>
   addCampaigns(name = "vaccine_washout")
 
 cdm$demo <- demographicsCohort(cdm, name = "demo") |>
-  # to consider to add this with demo cohort
   addRegion() |>
   addIMD() |>
   addEthnicity() |>
-  requireInDateRange(dateRange = as.Date(c(NA, "2021-01-01")), name = "demo")
+  compute(name = "demo") 
+
+cdm$demo <- demographicsCohort(cdm, name = "demo") |>
+  addRegion() |>
+  addIMD() |>
+  addEthnicity(name = "demo") |>
+  mutate(first_vaccine = as.Date("2020-12-08")) |>
+  addInObservation(
+    indexDate = "first_vaccine",
+    window = c(0, 0),
+    nameStyle = "in_observation",
+    name = "demo"
+  ) |>
+  filter(in_observation == 1L)|>
+  select(-in_observation, -first_vaccine) |>
+  renameCohort("individuals_of_interest") |>
+  compute(name = "demo") |>
+  recordCohortAttrition(reason = "In observation on the 8th December 2020") |>
 
 # Other vaccines:
 cdm$othervaccines <- conceptCohort(cdm = cdm, 

@@ -76,7 +76,6 @@ results$characterisation_eligibles <- characterisation_eligibles
 results$summary_campaigns <- summary_campaigns 
 
 #omopgenerics::tidy(results$summary_campaign1)
-
 result <- results |>
   vctrs::list_drop_empty() |>
   # purrr::imap(\(x, nm) {
@@ -96,8 +95,10 @@ exportSummarisedResult(result,
 logMessage("Save data for the local plots of the vaccination chronology") 
 #(see "vaccination_chronology" for more info
 source(here("analyses/Main_Analysis", "vaccination_chronology.R"))
+source(here("analyses/Main_Analysis", "vaccine_coverage.R"))
 
 write.csv(x_dosee, "Results/plot_dosee.csv", row.names = FALSE)
+
 write.csv(x_dose, "Results/plot_dose.csv", row.names = FALSE)
 write.csv(sex_imd_eth_reg_immuno_ag_pd, "Results/sex_imd_eth_reg_immuno_ag_pd.csv",
           row.names = FALSE)

@@ -29,12 +29,12 @@ cdm$immun <- conceptCohort(cdm = cdm,
                              name = "immun"
 )
 
-summariseOrphanCodes(
-  codelist$immun,
-  cdm,
-  domain = c("condition", "device", "drug", "measurement", "observation", "procedure",
-             "visit")
-            )
+# summariseOrphanCodes(
+#   codelist$immun,
+#   cdm,
+#   domain = c("condition", "device", "drug", "measurement", "observation", "procedure",
+#              "visit")
+#             )
 # Result:A tibble: 0 × 13
 
 cdm<- bind(
