@@ -1,10 +1,13 @@
 # Unique function to characterise 
 
 VaccineCharacterisation <- function(cohort, tableintersects = TRUE, 
-                                    estimates=c("region", "ethnicity", "sex", "imd",
+                                    variables =c("region", "ethnicity", "sex", "imd",
                                                 "immunosuppressed",
                                                 "age_eligibility", "prior_dose", "dose", 
-                                                "age_group")){
+                                                "age_group"),
+                                    estimates = list(
+                                      immunosuppressed = c("count", "percentage"),
+                                      age_eligibility = c("count", "percentage"))){
   intersect_args <- if (tableintersects) {
     list(
       cohortIntersectFlag = list(
@@ -52,12 +55,8 @@ VaccineCharacterisation <- function(cohort, tableintersects = TRUE,
             window = c(-365, -1)
           )
         ),
-        otherVariables = estimates,
-        estimates = list(
-          immunosuppressed = c("count", "percentage"),
-          age_eligibility = c("count", "percentage")
-        )
-      ),
+        otherVariables = variables,
+        estimates = estimates,
       intersect_args
     )
   )
