@@ -96,6 +96,7 @@ logMessage("Save data for the local plots of the vaccination chronology")
 #(see "vaccination_chronology" for more info
 source(here("analyses/Main_Analysis", "vaccination_chronology.R"))
 source(here("analyses/Main_Analysis", "vaccine_coverage.R"))
+source(here("analyses/Main_Analysis", "latex_tables.R"))
 
 write.csv(x_dosee, "Results/plot_dosee.csv", row.names = FALSE)
 
