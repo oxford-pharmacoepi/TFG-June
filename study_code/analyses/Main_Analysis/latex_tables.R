@@ -4,7 +4,7 @@ summariseCohortAttrition(cdm$demo)|>plotCohortAttrition(show = c("subjects"))
 attr_vac <- att_vac |> 
   filter(!additional_level %in% c(1L, 4L))|> 
   mutate(strata_level = if_else(additional_level ==3L, 
-                                "In observation during campaign of interest",
+                                "Under observation at the start of the campaign of interest",
                                 strata_level))|> filter(group_level=="a_2023") |>
   plotCohortAttrition(show = c("subjects"))
   

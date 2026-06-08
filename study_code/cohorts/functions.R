@@ -230,8 +230,6 @@ trimDatesIntoCampaign <- function(cohort, campaign, name = tableName(cohort)) {
   cohort|>
     trimToDateRange(c(start, end)) |>
     compute(name = name)
-   # requirePriorObservation(minPriorObservation = 365,
-  # name = name)
 }
 
 addAgeEligibility <- function(cohort, name = tableName(cohort), campaign) {
@@ -256,23 +254,6 @@ addAgeEligibility <- function(cohort, name = tableName(cohort), campaign) {
       (campaign == "a_2025") & age >= 75 ~ 1L,
       TRUE ~ 0L)) |>
         compute(name = name)}
-}
-
-addSensitivity <- function(cohort, name = tableName(cohort)) {
-  
-  cohort |>
-    left_join(cdm$demo_sens |>
-                select(subject_id) |>
-                mutate(satisfy_sensitivity = 1L),
-              by = "subject_id") |>
-    mutate(
-      satisfy_sensitivity = coalesce(
-        satisfy_sensitivity,
-        0L
-      )
-    ) |>
-    compute(name = name)
-  
 }
 
 addComorbidities <- function(cohort, name = tableName(cohort)) {

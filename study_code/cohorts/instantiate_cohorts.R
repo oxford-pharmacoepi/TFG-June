@@ -79,7 +79,7 @@ cdm$demo <- demographicsCohort(cdm, name = "demo") |>
   select(-in_observation, -first_vaccine) |>
   renameCohort("individuals_of_interest") |>
   compute(name = "demo") |>
-  recordCohortAttrition(reason = "In observation on the 8th December 2020") |>
+  recordCohortAttrition(reason = "In observation on the 8th December 2020") 
 
 # Other vaccines:
 cdm$othervaccines <- conceptCohort(cdm = cdm, 

@@ -19,4 +19,4 @@ immun <- unique(c(codelist$hiv_aids,
                   codelist$transplant
                   )
                )
-vac <- unique(codelists$covid_vaccine)
+vac <- unique(codelist$covid_vaccine)
