@@ -60,5 +60,6 @@ VaccineCharacterisation <- function(cohort, tableintersects = TRUE,
       intersect_args
     )
   )
+  )
 }
 
