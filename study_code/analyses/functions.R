@@ -8,58 +8,44 @@ VaccineCharacterisation <- function(cohort, tableintersects = TRUE,
                                     estimates = list(
                                       immunosuppressed = c("count", "percentage"),
                                       age_eligibility = c("count", "percentage"))){
-  intersect_args <- if (tableintersects) {
-    list(
-      cohortIntersectFlag = list(
-        "flag_any_time_prior_vaccination" = list(
-          targetCohortTable = "othervaccines",
-          window = c(-Inf, -1)
-        ),
-        "flag_last_year_vaccination" = list(
-          targetCohortTable = "othervaccines",
-          window = c(-365, -1)
-        ),
-        "flag_on_index_vaccination" = list(
-          targetCohortTable = "othervaccines",
-          window = c(0, 0)
-        ),
-        "flag_any_time_prior_comorbidities" = list(
-          targetCohortTable = "comorbidities",
-          window = c(-Inf, -1)
-        )
-      ),
-      cohortIntersectCount = list(
-        "count_any_time_prior_vaccination" = list(
-          targetCohortTable = "othervaccines",
-          window = c(-Inf, -1)
-        ),
-        "count_last_year_vaccination" = list(
-          targetCohortTable = "othervaccines",
-          window = c(-365, -1)
-        )
-      )
+summariseCharacteristics( 
+  cohort = cohort,
+  tableIntersectCount = list(
+    "Number visits in the prior year" = list(
+      tableName = "visit_occurrence",
+      window = c(-365, -1)
     )
-  }
-  else {
-    list()
-  }
-  
-  do.call(
-    summariseCharacteristics,
-    c(
-      list(
-        cohort = cohort,
-        tableIntersectCount = list(
-          "Number visits in the prior year" = list(
-            tableName = "visit_occurrence",
-            window = c(-365, -1)
-          )
-        ),
-        otherVariables = variables,
-        estimates = estimates,
-      intersect_args
+  ),
+  cohortIntersectFlag = list(
+    "flag_any_time_prior_vaccination" = list(
+      targetCohortTable = "othervaccines",
+      window = c(-Inf, -1)
+    ),
+    "flag_last_year_vaccination" = list(
+      targetCohortTable = "othervaccines",
+      window = c(-365, -1)
+    ),
+    "flag_on_index_vaccination" = list(
+      targetCohortTable = "othervaccines",
+      window = c(0, 0)
+    ),
+    "flag_any_time_prior_comorbidities" = list(
+      targetCohortTable = "comorbidities",
+      window = c(-Inf, -1)
     )
+  ),
+  cohortIntersectCount = list(
+    "count_any_time_prior_vaccination" = list(
+      targetCohortTable = "othervaccines",
+      window = c(-Inf, -1)
+    ),
+    "count_last_year_vaccination" = list(
+      targetCohortTable = "othervaccines",
+      window = c(-365, -1)
+    )
+  ),
+  otherVariables = variables,
+  estimates = estimates
   )
-  )
-}
+  }
 
