@@ -1,3 +1,4 @@
+library(tinytable)
 att_vac<-summariseCohortAttrition(cdm$vaccinated_within_campaigns)
 att_vac1<-summariseCohortAttrition(cdm$vaccine_washout)
 summariseCohortAttrition(cdm$demo)|>plotCohortAttrition(show = c("subjects"))

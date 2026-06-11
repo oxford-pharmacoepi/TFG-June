@@ -37,6 +37,7 @@ cdm<- bind(
   cdm$s_2024 |> renameCohort("s_2024"),
   cdm$a_2024 |> renameCohort("a_2024"),
   cdm$s_2025 |> renameCohort("s_2025"),
+  cdm$a_2025 |> renameCohort("a_2025"),
   name = "all_campaigns"
 ) 
 

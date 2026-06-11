@@ -64,7 +64,7 @@ addCampaigns <- function(cohort, name = tableName(cohort)){
       cohort_start_date>=as.Date("2024-04-15") & cohort_start_date<=as.Date("2024-06-30") ~ "s_2024",
       cohort_start_date>=as.Date("2024-10-03") & cohort_start_date<=as.Date("2025-01-31") ~ "a_2024",
       cohort_start_date>=as.Date("2025-04-01") & cohort_start_date<=as.Date("2025-06-17") ~ "s_2025",
-      cohort_start_date>=as.Date("2025-09-01") & cohort_start_date<=as.Date("2026-01-31") ~ "a_2025",
+      cohort_start_date>=as.Date("2025-10-01") & cohort_start_date<=as.Date("2026-01-31") ~ "a_2025",
       TRUE ~ NA_character_)
     ) |>
     mutate(vaccination_campaign = coalesce(vaccination_campaign, "None")) |>
@@ -149,7 +149,7 @@ addCampaigns <- function(cohort, name = tableName(cohort)){
       cohort_start_date>=as.Date("2024-04-15") & cohort_start_date<=as.Date("2024-06-30") ~ "s_2024",
       cohort_start_date>=as.Date("2024-10-03") & cohort_start_date<=as.Date("2025-01-31") ~ "a_2024",
       cohort_start_date>=as.Date("2025-04-01") & cohort_start_date<=as.Date("2025-06-17") ~ "s_2025",
-      cohort_start_date>=as.Date("2025-09-01") & cohort_start_date<=as.Date("2026-01-31") ~ "a_2025",
+      cohort_start_date>=as.Date("2025-10-01") & cohort_start_date<=as.Date("2026-01-31") ~ "a_2025",
       TRUE ~ NA_character_)
     ) |>
     mutate(vaccination_campaign = coalesce(vaccination_campaign, "None")) |>
@@ -217,7 +217,7 @@ trimDatesIntoCampaign <- function(cohort, campaign, name = tableName(cohort)) {
      "s_2024" = as.Date("2024-04-15"),
      "a_2024" = as.Date("2024-10-03"),
      "s_2025" = as.Date("2025-04-01"),
-     "a_2025" = as.Date("2025-09-01")
+     "a_2025" = as.Date("2025-10-01")
      )
   end <- switch(campaign,
      "a_2023" = as.Date("2024-01-31"),
