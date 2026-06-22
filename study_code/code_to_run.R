@@ -47,7 +47,10 @@ cdm <- cdmFromCon(
   cdmName = dbName,
   achillesSchema = achilles_schema #,cohortTables = c()
 )
-cdm <- readSourceTable(cdm = cdm, name =c("immunosuppressed", "demo", "vaccine_washout", "othervaccines", "comorbidities", "all_campaigns"))
+
+#Uncomment when baseline cohorts are already created
+#cdm <- readSourceTable(cdm = cdm, name =c("immunosuppressed", "demo", "vaccine_washout", "othervaccines", 
+#                                          "comorbidities"))
 #listSourceTables(cdm = cdm)
 #dropSourceTable(cdm = cdm, name = dplyr::everything())
 

@@ -3,6 +3,8 @@
 # since it has the real cohort_start_ and _end dates
 cdm$vaccinated_within_campaigns <- cdm$all_campaigns |>
   filter(vaccinated == 1) |>
+  select(-cohort_start_date) |>
+  rename(cohort_start_date = vaccination_date) |>
   compute(name = "vaccinated_within_campaigns") |>
   recordCohortAttrition(reason = "Vaccinated within campaign of interest")
 

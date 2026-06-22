@@ -17,7 +17,7 @@ In order to conduct all the execution, download the entire repository (you can d
 
 ### Diagnostics
 
-Conformed by **diagnostics_code** and  **diagnostics_shiny**, these repositories evaluate the codelists used in the study and integrate **PhenotypeR** package to facilitate visualisaton, respectively.
+Conformed by **diagnostics_code** and  **diagnostics_shiny**, these repositories evaluate the code lists used in the study and integrate **PhenotypeR** package to facilitate visualisaton, respectively.
 
 #### Steps
 
@@ -33,7 +33,7 @@ Conformed by **diagnostics_code** and  **diagnostics_shiny**, these repositories
 
 6)  When finished, a results .csv file will be created in the **Results** folder. Share the .csv file when done.
 
-7)  OPTIONAL: Visualize Results in a Shiny
+7)  OPTIONAL: Visualise Results in a Shiny
 
     -   Navigate to the **diagnostics_shiny** folder and open the project file `PhenotypeRShiny.Rproj` in RStudio.
     -   You should see the project name in the top-right corner of your RStudio session.
@@ -41,31 +41,3 @@ Conformed by **diagnostics_code** and  **diagnostics_shiny**, these repositories
     -   Open the `global.R` script in the `shiny` folder.
     -   Click the *Run App* button in RStudio to launch the local Shiny app for interactive exploration of the results.
     
-### Main Study
-
-Conformed by **study_code** and  **study_shiny**, these repositories evaluate the codelists used in the study and integrate the **Shiny** package to facilitate visualisaton, respectively.
-
-#### Steps
-
-1.  Make sure to open the `**MainStudy** project`StudyCode.Rproj` in RStudio.
-
-2.  Restore packages from `renv.lock`: with `renv::restore()`.
-
-3.  Restart the R session.
-
-4.  Open `code_to_run.R`, fill in the required fields (name of database, schema name with OMOP data, schema name to write results, table name stem for results to be saved in the result schema), and run the script.
-
-5.  Set flags as needed:
-
-    -   `createCohorts <- TRUE` to instantiate and characterise the study cohorts
-    -   `runModel <- TRUE` to run the model
-
-6.  When finished, a ZIP file containing the result files will be created in the **Results** folder. Share the zipped folder when done.
-
-7.  OPTIONAL: Visualize Results in Shiny
-
-    -   Navigate to the **study_shiny** folder and open the project file `Studyshiny.Rproj` in RStudio.
-    -   You should see the project name in the top-right corner of your RStudio session.
-    -   Copy the generated result files (in .csv format) into the `data` folder located within the **study_shiny** directory.
-    -   Open the `global.R` script.
-    -   Click the *Run App* button in RStudio to launch the local Shiny app for interactive exploration of the results.

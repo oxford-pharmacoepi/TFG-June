@@ -30,7 +30,7 @@ vaccines <- importCodelist(here::here("codelist", "vaccines"), type = "csv")
 source(here("cohorts", "functions.R"))
 logMessage("Codelists and functions to be used imported")
 
-#source(here("cohorts", "instantiate_cohorts.R")) 
+source(here("cohorts", "instantiate_cohorts.R")) 
 logMessage("Vaccinated people identified by campaign")
 
 source(here("cohorts", "all_campaign.R")) 
@@ -45,9 +45,7 @@ logMessage("Study cohorts instantiated")
 # Cohort counts and attrition ----
 results[["attrition_vaccinated"]] <- summariseCohortAttrition(cdm$vaccine_washout)
 results[["attrition_vaccinated_within_campaigns"]] <- summariseCohortAttrition(cdm$vaccinated_within_campaigns)
-#results[["attrition_vaccinated_within_campaigns_sens"]] <- summariseCohortAttrition(cdm$vaccinated_within_campaigns_sens)
 results[["attrition_for_coverage"]] <- summariseCohortAttrition(cdm$all_campaigns)
-#results[["attrition_for_coverage_sens"]] <- summariseCohortAttrition(cdm$all_campaigns_sens)
 logMessage("Attritions by campaign and for coverage finished")
 
 

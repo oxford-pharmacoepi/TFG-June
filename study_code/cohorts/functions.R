@@ -195,17 +195,12 @@ addVaccinatedInCampaign <- function(cohort, name = tableName(cohort)){
       by = c("subject_id")
     ) |>
     select(-vaccination_campaign) |>
-    mutate(cohort_start_date = if_else(
+    mutate(cohort_start_date = cohort_start_date.x,
+           vaccination_date = if_else(
       is.na(cohort_start_date.y),
-      cohort_start_date.x,
-      cohort_start_date.y
-    )
-    ) |>
-    mutate(cohort_end_date = if_else(
-      is.na(cohort_end_date.y),
-      cohort_end_date.x,
-      cohort_end_date.y
-    )
+      as.Date(NA),
+      cohort_start_date.y),
+      cohort_end_date = cohort_end_date.y
     ) |>
     select(-cohort_start_date.x, -cohort_start_date.y, -cohort_end_date.x, -cohort_end_date.y) |>
     compute(name = name)
@@ -256,48 +251,49 @@ addAgeEligibility <- function(cohort, name = tableName(cohort), campaign) {
         compute(name = name)}
 }
 
-addComorbidities <- function(cohort, name = tableName(cohort)) {
-  cohort|>
-    addCohortIntersectFlag(
-          targetCohortTable = "comorbidities",
-          window = list("flag_any_time_prior_comorbidities" = c(-Inf, -1)),
-          name = name
-          ) |>
-    # addCohortIntersectCount(
-    #   targetCohortTable = "othervaccines",
-    #   window = list("count_any_time_prior_vaccination" = c(-Inf, -1),
-    #                 "count_last_year_vaccination" =  c(-365, -1)),
-    #   #nameStyle = "{window_name}",
-    #   name = name
-    # )|>
-    mutate(comorbidities = if_else(if_any(c(contains("flag_any_time_prior_comorbidities")), ~.x== 1L), 
-           1L, 0L))|>
-    select(c(colnames(cohort),"comorbidities")) |>
-    compute(name = name)
-}
-
-addOtherVaccines <- function(cohort,
-                             window = list(other_vaccines_on_index = c(0, 0)),
-                             name = tableName(cohort)) {
-  
-  window_name <- unlist(names(window))
-  
-  cohort |>
-    addCohortIntersectFlag(
-      targetCohortTable = "othervaccines",
-      window = window,
-      name = name
-    ) |>
-    mutate(
-      vaccine_on_index = if_else(
-        if_any(
-          contains("_on_index"),
-          ~ .x == 1L
-        ),
-        1L,
-        0L
-      )
-    ) |>
-    select(c(colnames(cohort),"vaccine_on_index")) |>
-    compute(name = name)
-}
+# addComorbidities <- function(cohort, name = tableName(cohort)) {
+#   cohort|>
+#     addCohortIntersectFlag(
+#           targetCohortTable = "comorbidities",
+#           window = list("flag_any_time_prior_comorbidities" = c(-Inf, -1)),
+#           name = name
+#           ) |>
+#     # addCohortIntersectCount(
+#     #   targetCohortTable = "othervaccines",
+#     #   window = list("count_any_time_prior_vaccination" = c(-Inf, -1),
+#     #                 "count_last_year_vaccination" =  c(-365, -1)),
+#     #   #nameStyle = "{window_name}",
+#     #   name = name
+#     # )|>
+#     mutate(comorbidities = if_else(if_any(c(contains("flag_any_time_prior_comorbidities")), ~.x== 1L), 
+#            1L, 0L))|>
+#     select(c(colnames(cohort),"comorbidities")) |>
+#     compute(name = name)
+# }
+# 
+# addOtherVaccines <- function(cohort,
+#                              window = list(other_vaccines_on_index = c(0, 0)),
+#                              name = tableName(cohort)) {
+#   
+#   window_name <- unlist(names(window))
+#   
+#   cohort |>
+#     addCohortIntersectFlag(
+#       indexDate = "vaccination_date",
+#       targetCohortTable = "othervaccines",
+#       window = window,
+#       name = name
+#     ) |>
+#     mutate(
+#       vaccine_on_index = if_else(
+#         if_any(
+#           contains("_on_index"),
+#           ~ .x == 1L
+#         ),
+#         1L,
+#         0L
+#       )
+#     ) |>
+#     select(c(colnames(cohort),"vaccine_on_index")) |>
+#     compute(name = name)
+# }

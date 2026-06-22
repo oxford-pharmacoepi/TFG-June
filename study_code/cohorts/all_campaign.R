@@ -27,9 +27,9 @@ cdm[[campaign]] <- cdm$demo |>
   filter(prior_dose>=2L) |>
   compute(name = campaign)|>
   recordCohortAttrition(reason = "Eligibles for booster dose vaccination") |>
-  addAgeEligibility(campaign = campaign) |>
-  addOtherVaccines() |>
-  addComorbidities(name = campaign)
+  addAgeEligibility(campaign = campaign, name = campaign) 
+  #addOtherVaccines() |>
+  #addComorbidities(name = campaign)
 }
 
 cdm<- bind(
@@ -37,7 +37,6 @@ cdm<- bind(
   cdm$s_2024 |> renameCohort("s_2024"),
   cdm$a_2024 |> renameCohort("a_2024"),
   cdm$s_2025 |> renameCohort("s_2025"),
-  cdm$a_2025 |> renameCohort("a_2025"),
   name = "all_campaigns"
 ) 
 

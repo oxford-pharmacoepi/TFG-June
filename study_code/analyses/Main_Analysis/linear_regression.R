@@ -3,8 +3,8 @@
 df <- cdm$all_campaigns |>
   copyCohorts(n =1, name = "df") |>
   select(vaccinated, age_group, immunosuppressed, imd, ethnicity, region, sex, 
-         prior_dose, cohort_name) |>
-  collect(name ="df") |> 
+         prior_dose, cohort_name) |> 
+  collect(name ="df") |>
   mutate(
     age_group = factor(age_group, levels = c("75-84", "65-74", "85-94", ">=95",
                                              "<=34", "35-44", "45-54", "55-64")),
@@ -14,7 +14,7 @@ df <- cdm$all_campaigns |>
     region = factor(region, levels = c("Scotland", "Wales", 
                                        "Northern Ireland", "England")),
     sex = factor(sex, levels = c("Female", "Male")),
-    prior_dose = factor(prior_dose, levels = as.character(2:9))
+    prior_dose = factor(prior_dose, levels = c(5, 2:4, 6:10))
   ) 
 
 fits <- list()
@@ -67,7 +67,6 @@ for (campaign in campaigns){
       family = binomial(link = "logit"),
       data = df_campaign
     )
-    
   )
 }
 
