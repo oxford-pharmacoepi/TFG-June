@@ -35,12 +35,13 @@ summariseOrphanCodes(
   domain = c("condition", "device", "drug", "measurement", "observation", "procedure",
              "visit")
             )
+# Result:A tibble: 0 × 13
 
 summariseOrphanCodes(
   codelist["covid_vaccine"],
   cdm
 )
-# Result:A tibble: 0 × 13
+
 
 cdm<- bind(
   cdm$covid,
