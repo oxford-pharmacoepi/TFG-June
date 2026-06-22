@@ -23,7 +23,7 @@ Conformed by **diagnostics_code** and  **diagnostics_shiny**, these repositories
 
 1)  Open the **diagnostics_code** folder.
 
-2)  Make sure to open the `DiagnosticsCode.Rproj` in RStudio.
+2)  Make sure to open the `DiagnosticsCode.Rproj` project in RStudio.
 
 3)  Restore packages from `renv.lock`: with `renv::restore()`.
 
@@ -41,3 +41,28 @@ Conformed by **diagnostics_code** and  **diagnostics_shiny**, these repositories
     -   Open the `global.R` script in the `shiny` folder.
     -   Click the *Run App* button in RStudio to launch the local Shiny app for interactive exploration of the results.
     
+### Main Study
+
+Conformed by **study_code** and  **study_shiny**, these repositories evaluate the codelists used in the study and integrate the **Shiny** package to facilitate visualisaton, respectively.
+
+#### Steps
+
+1)  Open the **study_code** folder.
+
+2)  Make sure to open the `StudyCode.Rproj` project in RStudio.
+
+3)  Restore packages from `renv.lock`: with `renv::restore()`.
+
+4)  Restart the R session.
+
+5)  Open `code_to_run.R`, fill in the required fields (name of database, schema name with OMOP data, schema name to write results, table name stem for results to be saved in the result schema), and run the script.
+
+6)  When finished, a ZIP file containing the result files will be created in the **Results** folder. Share the zipped folder when done.
+
+7)  OPTIONAL: Visualise Results in Shiny
+
+    -   Navigate to the **study_shiny** folder and open the project file `Studyshiny.Rproj` in RStudio.
+    -   You should see the project name in the top-right corner of your RStudio session.
+    -   Copy the generated result files (in .csv format) into the `data` folder located within the **study_shiny** directory.
+    -   Open the `global.R` script.
+    -   Click the *Run App* button in RStudio to launch the local Shiny app for interactive exploration of the results.
